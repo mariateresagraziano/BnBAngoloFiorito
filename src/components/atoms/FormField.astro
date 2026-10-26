@@ -1,0 +1,15 @@
+---
+// Etichetta + campo del form (slot). L'asterisco indica i campi obbligatori.
+interface Props {
+  label: string;
+  required?: boolean;
+  class?: string;
+}
+
+const { label, required = false, class: className } = Astro.props;
+---
+
+<label class:list={['fieldset', className]}>
+  <span class="fieldset-legend text-base">{label}{required && '*'}</span>
+  <slot />
+</label>

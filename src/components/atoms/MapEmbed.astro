@@ -1,0 +1,17 @@
+---
+import { site } from '../../data/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<iframe
+  src={site.mapsEmbedUrl}
+  title={`${site.name} – Google Maps`}
+  class:list={['w-full border-0', className]}
+  loading="lazy"
+  referrerpolicy="no-referrer-when-downgrade"
+  allowfullscreen></iframe>

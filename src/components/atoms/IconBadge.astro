@@ -1,0 +1,15 @@
+---
+// Icona dentro un cerchio giallo (ex fa-stack dei servizi).
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  icon: string;
+  class?: string;
+}
+
+const { icon, class: className } = Astro.props;
+---
+
+<span class:list={['inline-flex size-24 items-center justify-center rounded-full bg-accent text-white', className]}>
+  <Icon name={icon} class="size-10" />
+</span>

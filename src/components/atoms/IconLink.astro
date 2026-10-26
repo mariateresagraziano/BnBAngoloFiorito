@@ -1,0 +1,22 @@
+---
+// Link testuale preceduto da un'icona (contatti di top bar e footer).
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  href: string;
+  icon: string;
+  external?: boolean;
+  class?: string;
+}
+
+const { href, icon, external = false, class: className } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={['inline-flex items-center gap-2 hover:text-secondary', className]}
+  {...external && { target: '_blank', rel: 'noopener' }}
+>
+  <Icon name={icon} />
+  <slot />
+</a>

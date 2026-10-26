@@ -1,0 +1,15 @@
+---
+import { Image } from 'astro:assets';
+import logoColor from '../../assets/images/brand/LOGO.svg';
+import logoWhite from '../../assets/images/brand/LOGO_BIANCO.svg';
+
+interface Props {
+  variant?: 'color' | 'white';
+  class?: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const { variant = 'color', class: className, loading = 'lazy' } = Astro.props;
+---
+
+<Image src={variant === 'white' ? logoWhite : logoColor} alt="Angolo Fiorito" class:list={['w-auto', className]} loading={loading} />

@@ -1,0 +1,33 @@
+---
+// Bottone del sito: <a> se riceve href, altrimenti <button>.
+// "accent" = giallo (ex m-btn-yellow), "primary" = verde acqua (ex m-btn-azul).
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = {
+  variant?: 'accent' | 'primary';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  block?: boolean;
+} & Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'type'>;
+
+const { variant = 'accent', href, type = 'button', block = false, class: className, ...rest } = Astro.props;
+
+const classes = [
+  'btn border-0 px-8 font-bold uppercase',
+  variant === 'accent' ? 'btn-accent hover:bg-primary hover:text-primary-content' : 'btn-primary hover:bg-secondary',
+  { 'btn-block': block },
+  className,
+];
+---
+
+{
+  href ? (
+    <a href={href} class:list={classes} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class:list={classes} {...rest}>
+      <slot />
+    </button>
+  )
+}
