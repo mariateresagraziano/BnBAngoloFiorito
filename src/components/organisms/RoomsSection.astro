@@ -1,0 +1,32 @@
+---
+import SectionHeading from '../atoms/SectionHeading.astro';
+import RoomCard from '../molecules/RoomCard.astro';
+import { rooms } from '../../data/rooms';
+import { localizePath, useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="bg-base-200 py-16">
+  <div class="container mx-auto px-4">
+    <SectionHeading>{t('section.rooms')}</SectionHeading>
+    <div class="mx-auto mt-10 flex max-w-6xl flex-col gap-8">
+      {
+        rooms.map((room) => (
+          <RoomCard
+            name={room.name[lang]}
+            image={room.image}
+            features={room.features.map((f) => ({ icon: f.icon, text: f.text[lang] }))}
+            cta={{ label: t('cta.book'), href: localizePath('/prenota', lang) }}
+            more={{ label: t('cta.discover'), href: `${localizePath('/camere', lang)}#${room.slug}` }}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>

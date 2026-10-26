@@ -1,0 +1,17 @@
+---
+// Contenitore per testi lunghi (Markdown, regolamento, privacy, tariffe): tipografia di @tailwindcss/typography.
+interface Props {
+  lang?: string;
+  class?: string;
+}
+
+const { lang, class: className } = Astro.props;
+---
+
+<section class:list={['container mx-auto max-w-4xl px-4 py-14', className]} lang={lang}>
+  <div
+    class="prose prose-lg max-w-none prose-headings:font-sans prose-headings:font-bold prose-h3:text-primary prose-a:text-primary"
+  >
+    <slot />
+  </div>
+</section>

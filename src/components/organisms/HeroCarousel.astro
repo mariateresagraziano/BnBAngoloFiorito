@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Button from '../atoms/Button.astro';
+
+interface Slide {
+  image: ImageMetadata;
+  title: string;
+  text: string;
+  cta: { label: string; href: string };
+}
+
+interface Props {
+  slides: Slide[];
+}
+
+const { slides } = Astro.props;
+---
+
+<section class="hero-swiper swiper h-[70vh] min-h-105 w-full">
+  <div class="swiper-wrapper">
+    {
+      slides.map((slide, i) => (
+        <div class="swiper-slide relative">
+          <Image
+            src={slide.image}
+            alt=""
+            widths={[640, 1024, 1600, 2000]}
+            sizes="100vw"
+            loading={i === 0 ? 'eager' : 'lazy'}
+            class="absolute inset-0 size-full object-cover"
+          />
+          <div class="absolute inset-0 bg-black/30" />
+          <div class="relative flex h-full flex-col items-center justify-center gap-4 px-6 text-center text-white">
+            <h2 class="text-6xl font-bold md:text-7xl">{slide.title}</h2>
+            <p class="max-w-2xl bg-black/50 px-2 text-lg">{slide.text}</p>
+            <Button href={slide.cta.href} class="mt-4">
+              {slide.cta.label}
+            </Button>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <div class="swiper-pagination"></div>
+  <div class="swiper-button-prev text-white!"></div>
+  <div class="swiper-button-next text-white!"></div>
+</section>
+
+<script>
+  import Swiper from 'swiper';
+  import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/effect-fade';
+  import 'swiper/css/navigation';
+  import 'swiper/css/pagination';
+
+  document.querySelectorAll<HTMLElement>('.hero-swiper').forEach((el) => {
+    new Swiper(el, {
+      modules: [Autoplay, EffectFade, Navigation, Pagination],
+      loop: true,
+      effect: 'fade',
+      autoplay: { delay: 5000, disableOnInteraction: false },
+      pagination: { el: el.querySelector<HTMLElement>('.swiper-pagination'), clickable: true },
+      navigation: {
+        prevEl: el.querySelector<HTMLElement>('.swiper-button-prev'),
+        nextEl: el.querySelector<HTMLElement>('.swiper-button-next'),
+      },
+    });
+  });
+</script>

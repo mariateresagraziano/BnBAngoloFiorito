@@ -1,0 +1,56 @@
+---
+import { Icon } from 'astro-icon/components';
+import Logo from '../atoms/Logo.astro';
+import { getLangFromUrl, localizePath, nav, useTranslations } from '../../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (localizePath(href, lang).replace(/\/$/, '') || '/') === current;
+---
+
+<header class="sticky top-0 z-40 bg-base-100 shadow-sm">
+  <div class="navbar container mx-auto px-4">
+    <div class="flex-1">
+      <a href={localizePath('/', lang)} aria-label="Angolo Fiorito – Home">
+        <Logo class="h-12 lg:h-14" loading="eager" />
+      </a>
+    </div>
+
+    <!-- Desktop -->
+    <ul class="menu menu-horizontal hidden gap-1 text-base lg:flex">
+      {
+        nav.map((item) =>
+          item.children ? (
+            <li class="dropdown dropdown-hover dropdown-end">
+              <a href={localizePath(item.href, lang)} class:list={{ 'text-primary': isActive(item.href) }}>
+                {t(item.key)}
+                <Icon name="fa6-solid:chevron-down" class="size-3" />
+              </a>
+              <ul class="dropdown-content menu z-50 w-56 rounded-box bg-base-100 p-2 shadow">
+                {item.children.map((child) => (
+                  <li>
+                    <a href={localizePath(child.href, lang)} class:list={{ 'text-primary': isActive(child.href) }}>
+                      {t(child.key)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ) : (
+            <li>
+              <a href={localizePath(item.href, lang)} class:list={{ 'text-primary': isActive(item.href) }}>
+                {t(item.key)}
+              </a>
+            </li>
+          ),
+        )
+      }
+    </ul>
+
+    <!-- Mobile: apre il drawer definito nel template BaseLayout -->
+    <label for="nav-drawer" class="btn btn-ghost btn-square lg:hidden" aria-label={t('menu.open')}>
+      <Icon name="fa6-solid:bars" class="size-6" />
+    </label>
+  </div>
+</header>

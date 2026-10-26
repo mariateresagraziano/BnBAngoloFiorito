@@ -1,0 +1,70 @@
+---
+// Carosello di foto (Swiper); cliccando una foto si apre la galleria a schermo intero (PhotoSwipe).
+import { Image } from 'astro:assets';
+import { toLightboxImages } from '../../lib/lightbox';
+
+interface Props {
+  images: ImageMetadata[];
+  alt: string;
+  class?: string;
+}
+
+const { images, alt, class: className } = Astro.props;
+const slides = await toLightboxImages(images);
+---
+
+<div class:list={['image-slider swiper aspect-4/3 w-full bg-base-300', className]} data-lightbox>
+  <div class="swiper-wrapper">
+    {
+      slides.map((slide, i) => (
+        <a
+          class="swiper-slide block cursor-zoom-in"
+          href={slide.full}
+          data-pswp-width={slide.width}
+          data-pswp-height={slide.height}
+          target="_blank"
+        >
+          <Image
+            src={slide.image}
+            alt={`${alt} – ${i + 1}`}
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            loading={i === 0 ? 'eager' : 'lazy'}
+            class="size-full object-cover"
+          />
+        </a>
+      ))
+    }
+  </div>
+  <div class="swiper-pagination"></div>
+  <div class="swiper-button-prev hidden! text-white! md:flex!"></div>
+  <div class="swiper-button-next hidden! text-white! md:flex!"></div>
+</div>
+
+<script>
+  import Swiper from 'swiper';
+  import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/effect-fade';
+  import 'swiper/css/navigation';
+  import 'swiper/css/pagination';
+  import { initLightboxes } from '../../scripts/lightbox';
+
+  document.querySelectorAll<HTMLElement>('.image-slider').forEach((el) => {
+    new Swiper(el, {
+      modules: [Autoplay, EffectFade, Navigation, Pagination],
+      // rewind invece di loop: loop duplica le slide e PhotoSwipe le conterebbe due volte
+      rewind: true,
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      autoplay: { delay: 5000, pauseOnMouseEnter: true },
+      pagination: { el: el.querySelector<HTMLElement>('.swiper-pagination'), clickable: true },
+      navigation: {
+        prevEl: el.querySelector<HTMLElement>('.swiper-button-prev'),
+        nextEl: el.querySelector<HTMLElement>('.swiper-button-next'),
+      },
+    });
+  });
+
+  initLightboxes();
+</script>

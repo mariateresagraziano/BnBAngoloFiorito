@@ -1,0 +1,13 @@
+---
+import ContactList from '../molecules/ContactList.astro';
+import LanguageSwitcher from '../molecules/LanguageSwitcher.astro';
+import SocialLinks from '../molecules/SocialLinks.astro';
+---
+
+<div class="bg-primary text-primary-content text-sm">
+  <div class="container mx-auto flex min-h-10 items-center justify-between gap-4 px-4">
+    <ContactList class="hidden lg:flex" />
+    <LanguageSwitcher />
+    <SocialLinks variant="plain" networks={['facebook', 'tripadvisor']} />
+  </div>
+</div>

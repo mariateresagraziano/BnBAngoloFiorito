@@ -1,0 +1,56 @@
+---
+// Presentazione con due foto sovrapposte (ex motto()), usata in home e chi siamo.
+import { Image } from 'astro:assets';
+import Button from '../atoms/Button.astro';
+import lemonTree from '../../assets/images/home/motto_first.jpg';
+import sea from '../../assets/images/home/motto_second.jpg';
+import { localizePath, useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  showButton?: boolean;
+}
+
+const { lang, showButton = false } = Astro.props;
+const t = useTranslations(lang);
+
+const content = {
+  it: {
+    title: 'Un angolo verde',
+    text: "Un angolo fiorito nel quale rilassarsi tra i profumi e i colori del Mediterraneo. Il posto ideale per una sosta a due passi da Roma, dal porto di Civitavecchia e dalla città etrusca di Tarquinia. Adatto a chi vuole combinare mare e città d'arte.",
+    alt: { lemonTree: 'Albero di limoni nel giardino', sea: 'Mare blu' },
+  },
+  en: {
+    title: 'A green corner',
+    text: 'A Flowered Corner in which to relax among the colors and fragrances of the Mediterranean. We are ideally situated a short drive from the train station and port of Civitavecchia. Nearby Rome and Tarquinia are easily accessible for unforgettable day trips.',
+    alt: { lemonTree: 'Lemon tree in the garden', sea: 'Blue sea' },
+  },
+}[lang];
+---
+
+<section class="container mx-auto grid items-center gap-12 px-4 py-16 md:grid-cols-[3fr_2fr] lg:py-24">
+  <!-- Riquadro giallo, foto grande e foto piccola sovrapposta in basso a destra -->
+  <div class="relative mx-auto w-full max-w-xl pr-8 pb-24 sm:pb-28">
+    <div class="absolute top-10 right-0 bottom-36 left-10 bg-accent"></div>
+    <Image
+      src={lemonTree}
+      alt={content.alt.lemonTree}
+      widths={[400, 600, 900]}
+      sizes="(min-width: 768px) 560px, 90vw"
+      class="relative aspect-4/3 w-[90%] object-cover shadow-lg"
+    />
+    <Image
+      src={sea}
+      alt={content.alt.sea}
+      widths={[300, 500]}
+      sizes="(min-width: 768px) 330px, 55vw"
+      class="absolute right-0 bottom-0 aspect-4/3 w-[55%] object-cover shadow-lg"
+    />
+  </div>
+
+  <div>
+    <h3 class="text-4xl">{content.title}</h3>
+    <p class="mt-6 text-lg leading-relaxed">{content.text}</p>
+    {showButton && <Button href={localizePath('/chi-siamo', lang)} class="mt-8">{t('cta.about')}</Button>}
+  </div>
+</section>

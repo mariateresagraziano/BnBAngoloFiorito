@@ -1,0 +1,30 @@
+---
+import SectionHeading from '../atoms/SectionHeading.astro';
+import AmenityCard from '../molecules/AmenityCard.astro';
+import { amenities } from '../../data/amenities';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  intro?: string;
+}
+
+const { lang, intro } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="py-16">
+  <div class="container mx-auto px-4">
+    <SectionHeading>{t('section.amenities')}</SectionHeading>
+    {intro && <p class="mx-auto mt-4 max-w-2xl text-center text-lg">{intro}</p>}
+    <div class="mx-auto mt-10 grid max-w-6xl auto-rows-fr gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        amenities.map((a) => (
+          <AmenityCard icon={a.icon} title={a.title[lang]}>
+            {a.text[lang]}
+          </AmenityCard>
+        ))
+      }
+    </div>
+  </div>
+</section>

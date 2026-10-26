@@ -1,0 +1,30 @@
+---
+import SectionHeading from '../atoms/SectionHeading.astro';
+import PhotoGrid from '../molecules/PhotoGrid.astro';
+import { galleries } from '../../data/gallery';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  intro?: string;
+}
+
+const { lang, intro } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="bg-base-200 py-16">
+  <div class="container mx-auto max-w-5xl px-4">
+    <SectionHeading>{t('section.gallery')}</SectionHeading>
+    {intro && <p class="mx-auto mt-4 max-w-2xl text-center text-lg">{intro}</p>}
+
+    {
+      galleries.map((gallery) => (
+        <div id={gallery.slug} class="mt-10 scroll-mt-24">
+          {gallery.title && <h3 class="mb-4 text-center text-3xl">{gallery.title[lang]}</h3>}
+          <PhotoGrid images={gallery.images} alt={gallery.title?.[lang] ?? t('section.gallery')} />
+        </div>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,36 @@
+---
+import Button from '../atoms/Button.astro';
+import SectionHeading from '../atoms/SectionHeading.astro';
+import IconList from '../molecules/IconList.astro';
+import ImageSlider from './ImageSlider.astro';
+import type { Room } from '../../data/rooms';
+import { localizePath, useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  room: Room;
+  lang: Lang;
+}
+
+const { room, lang } = Astro.props;
+const t = useTranslations(lang);
+const localize = (items: Room['services']) => items.map((i) => ({ icon: i.icon, text: i.text[lang] }));
+---
+
+<section id={room.slug} class="container mx-auto scroll-mt-24 px-4 py-14">
+  <SectionHeading>{room.name[lang]}</SectionHeading>
+
+  <div class="mx-auto mt-10 grid max-w-6xl items-start gap-10 lg:grid-cols-2">
+    <ImageSlider images={room.gallery} alt={room.name[lang]} />
+
+    <div>
+      <h3 class="text-3xl">{t('room.description')}</h3>
+      <p class="mt-4 text-lg leading-relaxed">{room.description[lang]}</p>
+      <IconList items={localize(room.schedule)} class="mt-4" />
+
+      <h3 class="mt-8 text-3xl">{t('room.services')}</h3>
+      <IconList items={localize(room.services)} class="mt-4" />
+
+      <Button href={localizePath('/prenota', lang)} class="mt-8">{t('cta.book')}</Button>
+    </div>
+  </div>
+</section>
