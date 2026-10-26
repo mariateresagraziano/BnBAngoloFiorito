@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../templates/BaseLayout.astro';
+import PageTitle from '../organisms/PageTitle.astro';
+import ContactForm from '../organisms/ContactForm.astro';
+import ContactCard from '../organisms/ContactCard.astro';
+import MapEmbed from '../atoms/MapEmbed.astro';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={t('nav.contact')}>
+  <PageTitle>{t('nav.contact')}</PageTitle>
+
+  <section class="container mx-auto grid max-w-6xl gap-10 px-4 py-14 lg:grid-cols-[3fr_2fr]">
+    <div>
+      <h3 class="text-4xl">{t('contact.title')}</h3>
+      <ContactForm lang={lang} type="contatti" />
+    </div>
+    <ContactCard />
+  </section>
+
+  <MapEmbed class="h-96" />
+</BaseLayout>

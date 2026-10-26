@@ -1,0 +1,36 @@
+---
+// Contenuti statici provvisori: verranno sostituiti dai dati di DatoCMS.
+import BaseLayout from '../templates/BaseLayout.astro';
+import PageTitle from '../organisms/PageTitle.astro';
+import RoomDetail from '../organisms/RoomDetail.astro';
+import TileDivider from '../organisms/TileDivider.astro';
+import { rooms } from '../../data/rooms';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const intro = {
+  it: 'Il B&B si compone di due camere a tema, la camera Africa e la camera Oxford, ognuna delle quali rispecchia le variegate esperienze internazionali della sua proprietaria.',
+  en: 'The B&B consists of two theme rooms, Africa room and Oxford room, each reflecting the varied international experiences of its owner.',
+}[lang];
+---
+
+<BaseLayout title={t('section.rooms')}>
+  <PageTitle>{t('section.rooms')}</PageTitle>
+
+  <p class="container mx-auto max-w-3xl px-4 pt-14 text-center text-lg leading-relaxed">{intro}</p>
+
+  {
+    rooms.map((room, i) => (
+      <>
+        {i > 0 && <TileDivider />}
+        <RoomDetail room={room} lang={lang} />
+      </>
+    ))
+  }
+</BaseLayout>

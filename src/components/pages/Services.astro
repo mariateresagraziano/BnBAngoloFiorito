@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../templates/BaseLayout.astro';
+import PageTitle from '../organisms/PageTitle.astro';
+import MediaList from '../organisms/MediaList.astro';
+import AmenitiesSection from '../organisms/AmenitiesSection.astro';
+import { services } from '../../data/services';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const items = services.map((s) => ({ slug: s.slug, image: s.image, title: s.title[lang], text: s.text[lang] }));
+---
+
+<BaseLayout title={t('nav.amenities')}>
+  <PageTitle>{t('nav.amenities')}</PageTitle>
+  <MediaList items={items} />
+  <AmenitiesSection lang={lang} />
+</BaseLayout>

@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../templates/BaseLayout.astro';
+import PageTitle from '../organisms/PageTitle.astro';
+import MediaList from '../organisms/MediaList.astro';
+import { places } from '../../data/places';
+import type { Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const title = { it: 'Civitavecchia e Dintorni', en: 'Civitavecchia and surroundings' }[lang];
+const items = places.map((p) => ({ slug: p.slug, image: p.image, title: p.title[lang], text: p.text[lang] }));
+---
+
+<BaseLayout title={title}>
+  <PageTitle>{title}</PageTitle>
+  <MediaList items={items} />
+</BaseLayout>

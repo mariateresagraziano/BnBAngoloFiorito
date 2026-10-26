@@ -1,0 +1,116 @@
+---
+// Contenuti statici provvisori: verranno sostituiti dai dati di DatoCMS.
+import BaseLayout from '../templates/BaseLayout.astro';
+import PageTitle from '../organisms/PageTitle.astro';
+import ProseSection from '../organisms/ProseSection.astro';
+import DataTable from '../molecules/DataTable.astro';
+import Button from '../atoms/Button.astro';
+import { rooms } from '../../data/rooms';
+import { breakfastRates, minimumStay, ratesUpdated, roomRates } from '../../data/rates';
+import { localizePath, useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const c = {
+  it: {
+    updated: 'Ultimo aggiornamento del listino',
+    minStay: 'Soggiorno minimo',
+    minStayText:
+      'La preghiamo di contattarci telefonicamente per conoscere la durata minima del soggiorno. Potremo verificare insieme la disponibilità e valutare se ci sono sconti o soluzioni personalizzate per il tuo soggiorno.',
+    period: 'Periodo',
+    minimum: 'Minimo',
+    nights: (n: number) => `${n} giorni`,
+    tax: 'Previsto il pagamento della tassa di soggiorno in struttura: 3,00€ a persona per notte per massimo 5 notti. Sconti sono disponibili per soggiorni superiori a 1 settimana.',
+    roomPrices: 'Prezzi camere senza colazione',
+    perNight: (p: number) => `${p}€/notte`,
+    breakfast: 'Colazione',
+    price: 'Prezzo',
+    perPerson: (p: number) => `+${p}€/persona`,
+    deposit:
+      'All’atto della prenotazione si paga il 100% della prima notte oppure il 30% del costo totale del soggiorno attraverso un bonifico istantaneo o altri metodi di pagamento, il restante va saldato al momento del check-in.',
+    checkText:
+      "Check in dalle 15:00 alle 21:00, check out dalle 7:00 alle 11:00. Oltre tale fascia d'orario contattare la struttura poiché potrebbe esserci un supplemento di 5€ all'ora dopo le 21:00, 10€ all'ora prima delle 7:00.",
+    cancellation: 'Termini di Cancellazione',
+    cancellationText:
+      'In caso di cancellazioni o modifiche il deposito non verrà rimborsato. In caso di mancata presentazione viene addebitato l’intero importo del soggiorno, la stessa regola vale per partenza anticipata.',
+  },
+  en: {
+    updated: 'Last updated',
+    minStay: 'Minimum stay',
+    minStayText:
+      'Please call us to check on the minimum stay, as we can verify availability and discuss potential discounts or customized solutions for your trip.',
+    period: 'Period',
+    minimum: 'Minimum',
+    nights: (n: number) => `${n} days`,
+    tax: 'A tourist tax of € 3.00 per person per night is payable at the property, up to a maximum of 5 consecutive nights. Discounts are available for stays over 1 week.',
+    roomPrices: 'Room prices without breakfast',
+    perNight: (p: number) => `${p}€/night`,
+    breakfast: 'Breakfast',
+    price: 'Price',
+    perPerson: (p: number) => `+${p}€/person`,
+    deposit:
+      'When booking you pay 100% of the first night or 30% of the total cost of the stay through an instant bank transfer or other payment methods, the remaining must be paid at check-in.',
+    checkText:
+      'Check-in is from 3:00 PM to 9:00 PM. Check-out is from 7:00 AM to 11:00 AM. For arrivals or departures outside these times, please contact the property directly. An additional fee may apply: €5 per hour for check-ins after 9:00 PM, and €10 per hour for check-outs before 7:00 AM.',
+    cancellation: 'Cancellation terms',
+    cancellationText:
+      'In case of cancellations or changes the deposit will not be refunded. The full amount of the stay is charged in case of no-show, the same rule applies to early departure.',
+  },
+}[lang];
+
+const roomName = (slug: string) => rooms.find((r) => r.slug === slug)?.name[lang] ?? slug;
+---
+
+<BaseLayout title={t('nav.rates')}>
+  <PageTitle>{t('nav.rates')}</PageTitle>
+
+  <ProseSection>
+    <p class="text-sm italic">{c.updated}: {ratesUpdated[lang]}</p>
+
+    <h3>{c.minStay}</h3>
+    <p>{c.minStayText}</p>
+    <DataTable
+      caption={c.minStay}
+      columns={[{ label: c.period }, { label: c.minimum }]}
+      rows={minimumStay.map((m) => [m.period[lang], c.nights(m.nights)])}
+    />
+    <p>{c.tax}</p>
+
+    <h3>{c.roomPrices}</h3>
+    {
+      roomRates.map((rates) => (
+        <>
+          <h4 id={rates.room}>{roomName(rates.room)}</h4>
+          <DataTable
+            caption={roomName(rates.room)}
+            columns={[{ label: c.period }, ...rates.columns.map((col) => ({ label: col.label[lang], guests: col.guests, note: col.note?.[lang] }))]}
+            rows={rates.rows.map((row) => [row.period[lang], ...row.prices.map(c.perNight)])}
+          />
+        </>
+      ))
+    }
+
+    <h3>{c.breakfast}</h3>
+    <DataTable
+      caption={c.breakfast}
+      columns={[{ label: c.breakfast }, { label: c.price }]}
+      rows={breakfastRates.map((b) => [b.name[lang], c.perPerson(b.price)])}
+    />
+    <p>{c.deposit}</p>
+
+    <h3>Check in / Check out</h3>
+    <p>{c.checkText}</p>
+
+    <h3>{c.cancellation}</h3>
+    <p>{c.cancellationText}</p>
+
+    <div class="not-prose mt-10">
+      <Button href={localizePath('/prenota', lang)}>{t('cta.book')}</Button>
+    </div>
+  </ProseSection>
+</BaseLayout>

@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../templates/BaseLayout.astro';
+import PageTitle from '../organisms/PageTitle.astro';
+import ContactForm from '../organisms/ContactForm.astro';
+import ContactCard from '../organisms/ContactCard.astro';
+import { site } from '../../data/site';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const intro = {
+  it: {
+    text: 'Compila il seguente form per contattare la struttura e richiedere la disponibilità della camera. È possibile prenotare anche tramite',
+  },
+  en: {
+    text: 'Fill out the following form to contact the property and request room availability. Bookings are also possible via',
+  },
+}[lang];
+---
+
+<BaseLayout title={t('nav.book')}>
+  <PageTitle>{t('nav.book')}</PageTitle>
+
+  <section class="container mx-auto grid max-w-6xl gap-10 px-4 py-14 lg:grid-cols-[3fr_2fr]">
+    <div>
+      <p class="text-lg leading-relaxed">
+        {intro.text}
+        <a href={site.social.whatsapp} target="_blank" rel="noopener" class="link link-primary">WhatsApp</a>.
+      </p>
+      <ContactForm lang={lang} type="prenotazione" />
+    </div>
+    <ContactCard />
+  </section>
+</BaseLayout>

@@ -1,0 +1,39 @@
+---
+// Pagina di solo testo da Markdown (src/content/legal/<lang>/<slug>.md).
+// Se manca la traduzione mostra la versione italiana con un avviso.
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../templates/BaseLayout.astro';
+import PageTitle from '../organisms/PageTitle.astro';
+import ProseSection from '../organisms/ProseSection.astro';
+import { defaultLang, useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  slug: 'regolamento' | 'policy';
+}
+
+const { lang, slug } = Astro.props;
+const t = useTranslations(lang);
+
+const entries = await getCollection('legal');
+const translated = entries.find((e) => e.id === `${lang}/${slug}`);
+const entry = translated ?? entries.find((e) => e.id === `${defaultLang}/${slug}`);
+if (!entry) throw new Error(`Contenuto mancante: legal/${defaultLang}/${slug}.md`);
+
+const { Content } = await render(entry);
+const contentLang = translated ? lang : defaultLang;
+---
+
+<BaseLayout title={entry.data.title}>
+  <PageTitle>{entry.data.title}</PageTitle>
+  {
+    !translated && (
+      <div class="container mx-auto max-w-4xl px-4 pt-10">
+        <p class="alert alert-info">{t('legal.untranslated')}</p>
+      </div>
+    )
+  }
+  <ProseSection lang={contentLang}>
+    <Content />
+  </ProseSection>
+</BaseLayout>

@@ -1,0 +1,53 @@
+---
+// Contenuti statici provvisori: verranno sostituiti dai dati di DatoCMS.
+import BaseLayout from '../templates/BaseLayout.astro';
+import PageTitle from '../organisms/PageTitle.astro';
+import Motto from '../organisms/Motto.astro';
+import GallerySection from '../organisms/GallerySection.astro';
+import MapSection from '../organisms/MapSection.astro';
+import { site } from '../../data/site';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const content = {
+  it: {
+    galleryIntro:
+      'La villa si trova su un lotto di 1000 metri quadrati dove potete godervi la vegetazione mediterranea e il sole.',
+    whereTitle: 'Dove Siamo',
+    where: [
+      'Il B&B fa parte di una villa situata in un quartiere tranquillo a soli 1,2 km dal porto e dalla stazione ferroviaria di Civitavecchia. La zona è ben servita da negozi e ristoranti. Rappresenta un ottimo punto di partenza per raggiungere la capitale Roma: culla di storia, arte e cultura, ma anche shopping e buon cibo.',
+      'Gli ospiti possono godere di spiagge vicine, visitare rinomati siti archeologici e storici, come le Terme di Traiano di Civitavecchia, Pyrgi di Santa Severa, Cerveteri e la famosa necropoli nella città etrusca di Tarquinia.',
+    ],
+    findUs: 'Ci trovi in:',
+  },
+  en: {
+    galleryIntro:
+      'The B&B is part of a villa found on a 1000 meter squared lot rich in Mediterranean vegetation and sunshine. In the garden, guests may enjoy breakfast and the hospitality of the owners.',
+    whereTitle: 'About the Area',
+    where: [
+      'The B&B is strategically positioned and ideal for travelers who seek variety in their holiday experience. Guests can enjoy nearby beaches, visit renowned archeological and historic sites, such as the "Terme di Traiano Civitavecchia", Pyrgi (Santa Severa), Cerveteri, and the notorious necropoli in the Etruscan town of Tarquinia.',
+      'Rome is a mere 45 minute train ride, with trains leaving for St. Peter’s station every 30 minutes. The "Ficoncella" natural springs, noted for their therapeutic and healing qualities, are 4km away, while the "Madonna delle lacrime di Civitavecchia" religious sanctuary may be reached by car in 5 minutes. Family fun at the "Aquafelix" water park is also a short drive away in Civitavecchia.',
+    ],
+    findUs: 'Where we are:',
+  },
+}[lang];
+---
+
+<BaseLayout title={t('nav.about')}>
+  <PageTitle>{t('nav.about')}</PageTitle>
+  <Motto lang={lang} />
+  <GallerySection lang={lang} intro={content.galleryIntro} />
+  <MapSection title={content.whereTitle}>
+    {content.where.map((paragraph) => <p>{paragraph}</p>)}
+    <p>
+      {content.findUs}<br />
+      <a href={site.mapsUrl} target="_blank" rel="noopener" class="link link-primary">{site.address}, Italia</a>
+    </p>
+  </MapSection>
+</BaseLayout>

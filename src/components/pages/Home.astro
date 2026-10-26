@@ -1,0 +1,59 @@
+---
+// Contenuti statici provvisori: verranno sostituiti dai dati di DatoCMS.
+import BaseLayout from '../templates/BaseLayout.astro';
+import HeroCarousel from '../organisms/HeroCarousel.astro';
+import PageTitle from '../organisms/PageTitle.astro';
+import Motto from '../organisms/Motto.astro';
+import TileDivider from '../organisms/TileDivider.astro';
+import RoomsSection from '../organisms/RoomsSection.astro';
+import AmenitiesSection from '../organisms/AmenitiesSection.astro';
+import introBnb from '../../assets/images/home/intro_bnb.jpg';
+import introCamere from '../../assets/images/home/intro_camere.jpg';
+import introLocation from '../../assets/images/home/intro_location.jpg';
+import { localizePath, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const content = {
+  it: {
+    title: "Benvenuti all'Angolo Fiorito",
+    amenitiesIntro: 'I proprietari vivono nella stessa struttura e sono sempre disponibili ad aiutare i loro ospiti.',
+    slides: [
+      { title: 'Bed & Breakfast', text: 'Un angolo fiorito nel quale rilassarsi tra i profumi e i colori del Mediterraneo.', cta: 'Chi siamo', href: '/chi-siamo' },
+      { title: 'Le Nostre Camere', text: 'Due camere, dotate di tutti i comfort, immerse nel silenzio e nella quiete di un quartiere residenziale.', cta: 'Prenota', href: '/prenota' },
+      { title: 'Location', text: "Il posto ideale per una sosta a due passi da Roma, adatto a chi vuole combinare mare e città d'arte.", cta: 'Esplora', href: '/location' },
+    ],
+  },
+  en: {
+    title: 'Welcome to Angolo Fiorito',
+    amenitiesIntro:
+      'The owners live in the same structure and are always available to help guests arranging their stay and trips in the area nearby.',
+    slides: [
+      { title: 'Bed & Breakfast', text: 'A flowered corner that offers a unique opportunity to relax among the colors and fragrances of the Mediterranean.', cta: 'About Us', href: '/chi-siamo' },
+      { title: 'Our Rooms', text: 'Two rooms are equipped with all comforts. They are immersed in the silence of a residential neighborhood.', cta: 'Book now', href: '/prenota' },
+      { title: 'Location', text: 'The ideal place for a stop a few steps from Rome, suitable for those who want to combine sea and city.', cta: 'Explore', href: '/location' },
+    ],
+  },
+}[lang];
+
+const images = [introBnb, introCamere, introLocation];
+const slides = content.slides.map((s, i) => ({
+  image: images[i],
+  title: s.title,
+  text: s.text,
+  cta: { label: s.cta, href: localizePath(s.href, lang) },
+}));
+---
+
+<BaseLayout title={content.title}>
+  <HeroCarousel slides={slides} />
+  <PageTitle>{content.title}</PageTitle>
+  <Motto lang={lang} showButton />
+  <TileDivider />
+  <RoomsSection lang={lang} />
+  <AmenitiesSection lang={lang} intro={content.amenitiesIntro} />
+</BaseLayout>
