@@ -1,0 +1,21 @@
+---
+import { localizePath, useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const link = 'link link-primary';
+---
+
+<label class="flex cursor-pointer items-start gap-3">
+  <input type="checkbox" name="policy" value="accepted" required class="checkbox checkbox-primary mt-0.5" />
+  <span>
+    *{t('form.consent')}
+    <a class={link} href={localizePath('/regolamento', lang)} target="_blank">{t('nav.rules')}</a>
+    {t('form.and')}
+    <a class={link} href={localizePath('/policy', lang)} target="_blank">{t('footer.privacy')}</a>
+  </span>
+</label>

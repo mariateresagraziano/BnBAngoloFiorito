@@ -1,0 +1,16 @@
+---
+import IconBadge from '../atoms/IconBadge.astro';
+
+interface Props {
+  icon: string;
+  title: string;
+}
+
+const { icon, title } = Astro.props;
+---
+
+<article class="flex flex-col items-center gap-4 p-6 text-center">
+  <IconBadge icon={icon} />
+  <h3 class="text-3xl">{title}</h3>
+  <p><slot /></p>
+</article>

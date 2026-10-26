@@ -1,0 +1,41 @@
+---
+// Griglia di miniature quadrate; cliccando si apre la galleria a schermo intero (PhotoSwipe).
+import { Image } from 'astro:assets';
+import { toLightboxImages } from '../../lib/lightbox';
+
+interface Props {
+  images: ImageMetadata[];
+  alt: string;
+  class?: string;
+}
+
+const { images, alt, class: className } = Astro.props;
+const photos = await toLightboxImages(images);
+---
+
+<div class:list={['grid grid-cols-2 gap-2 sm:grid-cols-3', className]} data-lightbox>
+  {
+    photos.map((photo, i) => (
+      <a
+        href={photo.full}
+        data-pswp-width={photo.width}
+        data-pswp-height={photo.height}
+        target="_blank"
+        class="group block aspect-square cursor-zoom-in overflow-hidden"
+      >
+        <Image
+          src={photo.image}
+          alt={`${alt} – ${i + 1}`}
+          widths={[300, 500]}
+          sizes="(min-width: 640px) 33vw, 50vw"
+          class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </a>
+    ))
+  }
+</div>
+
+<script>
+  import { initLightboxes } from '../../scripts/lightbox';
+  initLightboxes();
+</script>

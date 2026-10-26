@@ -1,0 +1,55 @@
+---
+// Tabella a righe alterne (ex u-table-color-row). Un'intestazione può mostrare N icone "persona".
+import { Icon } from 'astro-icon/components';
+
+interface Column {
+  label: string;
+  guests?: number;
+  /** Testo secondario sotto l'etichetta, non in maiuscolo */
+  note?: string;
+}
+
+interface Props {
+  columns: Column[];
+  rows: string[][];
+  caption?: string;
+}
+
+const { columns, rows, caption } = Astro.props;
+---
+
+<div class="not-prose my-6 overflow-x-auto border border-base-300">
+  <table class="table table-zebra text-base">
+    {caption && <caption class="sr-only">{caption}</caption>}
+    <thead class="bg-primary text-primary-content">
+      <tr>
+        {
+          columns.map((col) => (
+            <th class="align-top whitespace-normal uppercase">
+              {col.guests && (
+                <span class="mb-1 flex gap-1" aria-hidden="true">
+                  {Array.from({ length: col.guests }, () => (
+                    <Icon name="fa6-solid:user" class="size-3.5" />
+                  ))}
+                </span>
+              )}
+              {col.label}
+              {col.note && <span class="block text-sm font-normal normal-case">{col.note}</span>}
+            </th>
+          ))
+        }
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((row) => (
+          <tr>
+            {row.map((cell) => (
+              <td>{cell}</td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

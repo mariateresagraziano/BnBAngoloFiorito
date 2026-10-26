@@ -1,0 +1,30 @@
+---
+// Foto da un lato e contenuto (slot) dall'altro; su mobile la foto va sopra.
+// Altezza fissa su desktop: la foto riempie lo spazio (object-cover) senza influire sull'altezza.
+import { Image } from 'astro:assets';
+
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  /** Foto a destra su desktop */
+  reverse?: boolean;
+  class?: string;
+}
+
+const { image, alt, reverse = false, class: className } = Astro.props;
+---
+
+<article class:list={['grid overflow-hidden bg-base-100 shadow-sm md:h-96 md:grid-cols-2', className]}>
+  <div class:list={['relative h-64 md:h-auto', { 'md:order-last': reverse }]}>
+    <Image
+      src={image}
+      alt={alt}
+      widths={[480, 800, 1140]}
+      sizes="(min-width: 768px) 50vw, 100vw"
+      class="absolute inset-0 size-full object-cover"
+    />
+  </div>
+  <div class="flex flex-col justify-center overflow-y-auto p-8 text-left md:px-14">
+    <slot />
+  </div>
+</article>

@@ -1,0 +1,21 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  items: { icon: string; text: string }[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<ul class:list={['space-y-2', className]}>
+  {
+    items.map((item) => (
+      <li class="flex items-start gap-3">
+        <Icon name={item.icon} class="mt-1 size-4 shrink-0 text-primary" />
+        {item.text}
+      </li>
+    ))
+  }
+</ul>

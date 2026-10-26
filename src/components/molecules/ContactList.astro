@@ -1,0 +1,26 @@
+---
+import IconLink from '../atoms/IconLink.astro';
+import { site } from '../../data/site';
+
+interface Props {
+  direction?: 'row' | 'col';
+  /** Allineamento in colonna */
+  align?: 'center' | 'start';
+  class?: string;
+}
+
+const { direction = 'row', align = 'center', class: className } = Astro.props;
+---
+
+<address
+  class:list={[
+    'flex not-italic',
+    direction === 'row' ? 'flex-row items-center gap-6' : 'flex-col gap-1',
+    direction === 'col' && (align === 'start' ? 'items-start' : 'items-center'),
+    className,
+  ]}
+>
+  <IconLink href={site.mapsUrl} icon="fa6-solid:location-dot" external>{site.address}</IconLink>
+  <IconLink href={`tel:${site.phone.replaceAll(' ', '')}`} icon="fa6-solid:phone">{site.phone}</IconLink>
+  <IconLink href={`mailto:${site.email}`} icon="fa6-solid:envelope">{site.email}</IconLink>
+</address>

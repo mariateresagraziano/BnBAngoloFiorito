@@ -1,0 +1,53 @@
+---
+// "plain": icone bianche minimali (top bar). "badge": icone colorate dei brand (footer).
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import tripadvisor from '../../assets/images/brand/tripadvisor.svg';
+import tripadvisorWhite from '../../assets/images/brand/tripadvisor_white.svg';
+import booking from '../../assets/images/brand/booking.svg';
+import { site } from '../../data/site';
+
+type Network = keyof typeof site.social;
+
+interface Props {
+  variant?: 'plain' | 'badge';
+  networks?: Network[];
+  class?: string;
+}
+
+const { variant = 'badge', networks = Object.keys(site.social) as Network[], class: className } = Astro.props;
+
+const badge = 'btn btn-circle btn-sm border-0';
+const items: Record<Network, { label: string; icon?: string; image?: ImageMetadata; badgeClass?: string }> = {
+  facebook: { label: 'Facebook', icon: 'fa6-brands:facebook-f', badgeClass: `${badge} bg-white text-[#3b5998]` },
+  airbnb: { label: 'Airbnb', icon: 'fa6-brands:airbnb', badgeClass: `${badge} bg-white text-[#f23557]` },
+  tripadvisor: { label: 'TripAdvisor', image: variant === 'plain' ? tripadvisorWhite : tripadvisor },
+  booking: { label: 'Booking.com', image: booking },
+  whatsapp: { label: 'WhatsApp', icon: 'fa6-brands:whatsapp', badgeClass: `${badge} bg-[#25d366] text-white` },
+};
+---
+
+<div class:list={['flex items-center', variant === 'plain' ? 'gap-4' : 'gap-2', className]}>
+  {
+    networks.map((network) => {
+      const item = items[network];
+      return (
+        <a
+          href={site.social[network]}
+          target="_blank"
+          rel="noopener"
+          aria-label={item.label}
+          class={variant === 'badge' ? item.badgeClass : 'hover:text-secondary'}
+        >
+          {item.icon ? (
+            <Icon name={item.icon} />
+          ) : (
+            item.image && (
+              <Image src={item.image} alt="" class={variant === 'plain' ? 'h-3.5 w-auto' : 'size-8'} />
+            )
+          )}
+        </a>
+      );
+    })
+  }
+</div>
