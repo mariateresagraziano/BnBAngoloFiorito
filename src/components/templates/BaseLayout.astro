@@ -1,0 +1,43 @@
+---
+import '../../styles/global.css';
+import TopBar from '../organisms/TopBar.astro';
+import Header from '../organisms/Header.astro';
+import MobileNav from '../organisms/MobileNav.astro';
+import Footer from '../organisms/Footer.astro';
+import { getLangFromUrl } from '../../i18n/ui';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = '' } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-base-100 text-base-content font-sans">
+    <!-- Il drawer di daisyUI gestisce il menu mobile solo con CSS (checkbox) -->
+    <div class="drawer drawer-end">
+      <input id="nav-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content flex min-h-screen flex-col">
+        <TopBar />
+        <Header />
+        <main class="flex-1">
+          <slot />
+        </main>
+        <Footer />
+      </div>
+      <MobileNav />
+    </div>
+  </body>
+</html>
