@@ -1,0 +1,13 @@
+# Reindirizzamenti permanenti dai vecchi indirizzi .php del sito precedente
+Redirect 301 /index.php /
+Redirect 301 /chisiamo.php /chi-siamo/
+Redirect 301 /camere.php /camere/
+Redirect 301 /servizi.php /servizi/
+Redirect 301 /location.php /location/
+Redirect 301 /tariffe.php /tariffe/
+Redirect 301 /regolamento.php /regolamento/
+Redirect 301 /prenota.php /prenota/
+Redirect 301 /contatti.php /contatti/
+Redirect 301 /policy.php /policy/
+
+ErrorDocument 404 /404.html

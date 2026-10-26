@@ -1,0 +1,4 @@
+# config.php contiene la chiave segreta: non deve essere raggiungibile dal browser
+<FilesMatch "^config(\.example)?\.php$">
+  Require all denied
+</FilesMatch>
