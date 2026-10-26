@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import "@fontsource/allison";
+@import "@fontsource/new-tegomin";
+
+@plugin "@tailwindcss/typography";
+
+@plugin "daisyui" {
+  themes: angolofiorito --default;
+}
+
+/* Palette del vecchio sito (custom.css) */
+@plugin "daisyui/theme" {
+  name: "angolofiorito";
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: #ffffff;
+  --color-base-200: #fef9e6;
+  --color-base-300: #e7e7e7;
+  --color-base-content: #1f2937;
+
+  --color-primary: #61a5a4;
+  --color-primary-content: #ffffff;
+  --color-secondary: #385c5b;
+  --color-secondary-content: #ffffff;
+  --color-accent: #ffd34e;
+  --color-accent-content: #000000;
+  --color-neutral: #385c5b;
+  --color-neutral-content: #ffffff;
+
+  --radius-field: 0;
+  --radius-box: 0.25rem;
+  --radius-selector: 0;
+}
+
+@theme {
+  --font-sans: "New Tegomin", ui-serif, Georgia, serif;
+  --font-script: "Allison", cursive;
+  --color-primary-light: #80b6b5;
+}
+
+@layer base {
+  h1,
+  h2 {
+    @apply font-script font-normal leading-tight;
+  }
+}
