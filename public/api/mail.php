@@ -41,21 +41,39 @@ function verifyTurnstile(string $secret, string $token): bool
   if ($token === '') {
     return false;
   }
+  $url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
   $payload = http_build_query([
     'secret' => $secret,
     'response' => $token,
     'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '',
   ]);
-  $context = stream_context_create([
-    'http' => [
-      'method' => 'POST',
-      'header' => 'Content-Type: application/x-www-form-urlencoded',
-      'content' => $payload,
-      'timeout' => 10,
-    ],
-  ]);
-  $result = @file_get_contents('https://challenges.cloudflare.com/turnstile/v0/siteverify', false, $context);
-  if ($result === false) {
+
+  $result = false;
+  // cURL di preferenza: sugli hosting condivisi allow_url_fopen può essere disattivato
+  if (function_exists('curl_init')) {
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+      CURLOPT_POST => true,
+      CURLOPT_POSTFIELDS => $payload,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_TIMEOUT => 10,
+    ]);
+    $result = curl_exec($ch);
+    curl_close($ch);
+  } elseif (filter_var(ini_get('allow_url_fopen'), FILTER_VALIDATE_BOOLEAN)) {
+    $context = stream_context_create([
+      'http' => [
+        'method' => 'POST',
+        'header' => 'Content-Type: application/x-www-form-urlencoded',
+        'content' => $payload,
+        'timeout' => 10,
+      ],
+    ]);
+    $result = @file_get_contents($url, false, $context);
+  }
+
+  if (!is_string($result) || $result === '') {
+    error_log('mail.php: verifica Turnstile non raggiungibile (né cURL né allow_url_fopen disponibili, o errore di rete)');
     return false;
   }
   $data = json_decode($result, true);
