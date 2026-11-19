@@ -2,6 +2,11 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Button from '../atoms/Button.astro';
+// CSS nel frontmatter: finisce nell'<head>, così il layout è corretto prima che parta lo script
+import 'swiper/css';
+import 'swiper/css/effect-fade';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 interface Slide {
   image: ImageMetadata;
@@ -12,27 +17,30 @@ interface Slide {
 
 interface Props {
   slides: Slide[];
+  class?: string;
 }
 
-const { slides } = Astro.props;
+const { slides, class: className = 'h-[70vh]' } = Astro.props;
 ---
 
-<section class="hero-swiper swiper h-[70vh] min-h-105 w-full">
-  <div class="swiper-wrapper">
+<section class:list={['hero-swiper swiper min-h-105 w-full bg-neutral', className]}>
+  <div class="swiper-wrapper h-full">
     {
       slides.map((slide, i) => (
-        <div class="swiper-slide relative">
+        <div class="swiper-slide relative h-full">
           <Image
             src={slide.image}
             alt=""
-            widths={[640, 1024, 1600, 2000]}
+            widths={[640, 1024, 1440, 1920]}
+            quality={65}
             sizes="100vw"
             loading={i === 0 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : 'auto'}
             class="absolute inset-0 size-full object-cover"
           />
-          <div class="absolute inset-0 bg-black/30" />
+          <div class="absolute inset-0 bg-black/40" />
           <div class="relative flex h-full flex-col items-center justify-center gap-4 px-6 text-center text-white">
-            <h2 class="text-6xl font-bold md:text-7xl">{slide.title}</h2>
+            <h2 class="text-6xl font-bold drop-shadow-lg md:text-7xl">{slide.title}</h2>
             <p class="max-w-2xl bg-black/50 px-2 text-lg">{slide.text}</p>
             <Button href={slide.cta.href} class="mt-4">
               {slide.cta.label}
@@ -47,13 +55,20 @@ const { slides } = Astro.props;
   <div class="swiper-button-next text-white!"></div>
 </section>
 
+<style>
+  /* Prima dell'inizializzazione di Swiper mostra solo la prima slide (evita il flash di tutte le immagini) */
+  .hero-swiper:not(.swiper-initialized) .swiper-slide:not(:first-child) {
+    display: none;
+  }
+  /* Niente dissolvenza all'avvio: la prima slide compare subito, il fade vale solo per i cambi successivi */
+  .hero-swiper:not(.is-ready) .swiper-slide {
+    transition: none !important;
+  }
+</style>
+
 <script>
   import Swiper from 'swiper';
   import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
-  import 'swiper/css';
-  import 'swiper/css/effect-fade';
-  import 'swiper/css/navigation';
-  import 'swiper/css/pagination';
 
   document.querySelectorAll<HTMLElement>('.hero-swiper').forEach((el) => {
     new Swiper(el, {
@@ -65,6 +80,9 @@ const { slides } = Astro.props;
       navigation: {
         prevEl: el.querySelector<HTMLElement>('.swiper-button-prev'),
         nextEl: el.querySelector<HTMLElement>('.swiper-button-next'),
+      },
+      on: {
+        afterInit: () => requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('is-ready'))),
       },
     });
   });

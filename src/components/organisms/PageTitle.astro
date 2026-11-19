@@ -1,9 +1,15 @@
 ---
 // Fascia verde con il titolo della pagina (ex title_page()), presente in tutte le pagine.
 import SectionHeading from '../atoms/SectionHeading.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = 'py-14' } = Astro.props;
 ---
 
-<section class="bg-primary px-4 py-14 text-primary-content">
+<section class:list={['bg-primary px-4 text-primary-content', className]}>
   <SectionHeading as="h1" class="text-7xl md:text-8xl">
     <slot />
   </SectionHeading>

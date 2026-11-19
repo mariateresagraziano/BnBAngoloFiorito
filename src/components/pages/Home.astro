@@ -50,8 +50,11 @@ const slides = content.slides.map((s, i) => ({
 ---
 
 <BaseLayout title={content.title}>
-  <HeroCarousel slides={slides} />
-  <PageTitle>{content.title}</PageTitle>
+  <!-- Hero + titolo occupano esattamente lo schermo sotto TopBar (2.5rem) e Header (4rem / 4.5rem su lg) -->
+  <div class="flex h-[calc(100svh-6.5rem)] min-h-130 flex-col lg:h-[calc(100svh-7rem)]">
+    <HeroCarousel slides={slides} class="flex-1" />
+    <PageTitle class="py-6 md:py-8">{content.title}</PageTitle>
+  </div>
   <Motto lang={lang} showButton />
   <TileDivider />
   <RoomsSection lang={lang} />
