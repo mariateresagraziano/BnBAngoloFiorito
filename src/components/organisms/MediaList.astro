@@ -1,5 +1,6 @@
 ---
 // Elenco di blocchi foto + testo a lati alterni (pagine Servizi e Location).
+import SectionHeading from '../atoms/SectionHeading.astro';
 import MediaBlock from '../molecules/MediaBlock.astro';
 
 interface Item {
@@ -11,12 +12,15 @@ interface Item {
 
 interface Props {
   items: Item[];
+  /** Titolo facoltativo della sezione */
+  title?: string;
 }
 
-const { items } = Astro.props;
+const { items, title } = Astro.props;
 ---
 
 <section class="bg-base-200 py-16">
+  {title && <SectionHeading class="mb-10 px-4">{title}</SectionHeading>}
   <div class="container mx-auto flex max-w-6xl flex-col gap-8 px-4">
     {
       items.map((item, i) => (

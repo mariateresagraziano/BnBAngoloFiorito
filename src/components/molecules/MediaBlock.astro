@@ -1,6 +1,6 @@
 ---
 // Foto da un lato e contenuto (slot) dall'altro; su mobile la foto va sopra.
-// Altezza fissa su desktop: la foto riempie lo spazio (object-cover) senza influire sull'altezza.
+// Altezza minima su desktop (cresce col testo): la foto riempie lo spazio (object-cover) senza influire sull'altezza.
 import { Image } from 'astro:assets';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 const { image, alt, reverse = false, class: className } = Astro.props;
 ---
 
-<article class:list={['grid overflow-hidden bg-base-100 shadow-sm md:h-96 md:grid-cols-2', className]}>
+<article class:list={['grid overflow-hidden bg-base-100 shadow-sm md:min-h-96 md:grid-cols-2', className]}>
   <div class:list={['relative h-64 md:h-auto', { 'md:order-last': reverse }]}>
     <Image
       src={image}
@@ -24,7 +24,7 @@ const { image, alt, reverse = false, class: className } = Astro.props;
       class="absolute inset-0 size-full object-cover"
     />
   </div>
-  <div class="flex flex-col justify-center overflow-y-auto p-8 text-left md:px-14">
+  <div class="flex flex-col justify-center p-8 text-left md:px-14">
     <slot />
   </div>
 </article>

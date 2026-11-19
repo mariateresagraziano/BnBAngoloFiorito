@@ -1,28 +1,35 @@
 ---
+// Griglia dei servizi con icona (home e pagina Servizi). Le voci con un approfondimento linkano al blocco in Servizi.
 import SectionHeading from '../atoms/SectionHeading.astro';
-import AmenityCard from '../molecules/AmenityCard.astro';
+import InfoCard from '../molecules/InfoCard.astro';
 import { amenities } from '../../data/amenities';
-import { useTranslations, type Lang } from '../../i18n/ui';
+import { localizePath, useTranslations, type Lang } from '../../i18n/ui';
 
 interface Props {
   lang: Lang;
+  /** Titolo della sezione (default "Servizi") */
+  title?: string;
   intro?: string;
 }
 
-const { lang, intro } = Astro.props;
+const { lang, title, intro } = Astro.props;
 const t = useTranslations(lang);
 ---
 
 <section class="py-16">
   <div class="container mx-auto px-4">
-    <SectionHeading>{t('section.amenities')}</SectionHeading>
+    <SectionHeading>{title ?? t('section.amenities')}</SectionHeading>
     {intro && <p class="mx-auto mt-4 max-w-2xl text-center text-lg">{intro}</p>}
     <div class="mx-auto mt-10 grid max-w-6xl auto-rows-fr gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
         amenities.map((a) => (
-          <AmenityCard icon={a.icon} title={a.title[lang]}>
+          <InfoCard
+            icon={a.icon}
+            title={a.title[lang]}
+            href={a.detail && `${localizePath('/servizi', lang)}#${a.detail}`}
+          >
             {a.text[lang]}
-          </AmenityCard>
+          </InfoCard>
         ))
       }
     </div>

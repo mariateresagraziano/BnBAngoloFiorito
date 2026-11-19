@@ -1,14 +1,16 @@
 ---
-// Riquadro informativo con icona e titolo (es. "Da sapere" nelle tariffe).
+// Riquadro informativo con icona e titolo ("Da sapere" nelle tariffe, servizi in home e in Servizi).
+// Con `href` il titolo diventa un link (es. verso il blocco di approfondimento).
 import { Icon } from 'astro-icon/components';
 
 interface Props {
   icon: string;
   title: string;
+  href?: string;
   class?: string;
 }
 
-const { icon, title, class: className } = Astro.props;
+const { icon, title, href, class: className } = Astro.props;
 ---
 
 <article class:list={['flex gap-4 rounded-box bg-base-200 p-6', className]}>
@@ -16,7 +18,18 @@ const { icon, title, class: className } = Astro.props;
     <Icon name={icon} class="size-5" />
   </span>
   <div>
-    <h4 class="text-lg font-bold">{title}</h4>
+    <h3 class="text-lg font-bold">
+      {
+        href ? (
+          <a href={href} class="link-hover inline-flex items-center gap-2 text-secondary">
+            {title}
+            <Icon name="fa6-solid:arrow-right" class="size-3" />
+          </a>
+        ) : (
+          title
+        )
+      }
+    </h3>
     <p class="mt-2 leading-relaxed">
       <slot />
     </p>

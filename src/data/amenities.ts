@@ -5,6 +5,8 @@ export interface Amenity {
   icon: string;
   title: Record<Lang, string>;
   text: Record<Lang, string>;
+  /** Slug del blocco di approfondimento nella pagina Servizi (services.ts), se esiste */
+  detail?: string;
 }
 
 export const amenities: Amenity[] = [
@@ -16,6 +18,7 @@ export const amenities: Amenity[] = [
   {
     icon: 'fa6-solid:car',
     title: { it: 'Parcheggio', en: 'Car Parking' },
+    detail: 'parcheggio',
     text: {
       it: "Parcheggio privato gratuito situato all'interno della struttura",
       en: 'Private car park located inside the structure which is available for our guests, free of charge',
@@ -40,6 +43,7 @@ export const amenities: Amenity[] = [
   {
     icon: 'fa6-solid:bus',
     title: { it: 'Navetta', en: 'Shuttle' },
+    detail: 'navetta',
     text: {
       it: "Servizio a pagamento da/per stazione, porto e aeroporto di Fiumicino",
       en: 'Paid pick-up service to and from the train station, the port and Fiumicino airport.',

@@ -12,11 +12,15 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const c = {
+  it: { overview: 'In breve', spaces: 'Gli spazi della struttura' },
+  en: { overview: 'At a glance', spaces: 'Our spaces' },
+}[lang];
 const items = services.map((s) => ({ slug: s.slug, image: s.image, title: s.title[lang], text: s.text[lang] }));
 ---
 
 <BaseLayout title={t('nav.amenities')}>
   <PageTitle>{t('nav.amenities')}</PageTitle>
-  <MediaList items={items} />
-  <AmenitiesSection lang={lang} />
+  <AmenitiesSection lang={lang} title={c.overview} />
+  <MediaList items={items} title={c.spaces} />
 </BaseLayout>
