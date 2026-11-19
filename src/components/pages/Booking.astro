@@ -1,6 +1,8 @@
 ---
 import { seo } from '../../data/seo';
+import { Icon } from 'astro-icon/components';
 import BaseLayout from '../templates/BaseLayout.astro';
+import Button from '../atoms/Button.astro';
 import PageTitle from '../organisms/PageTitle.astro';
 import ContactForm from '../organisms/ContactForm.astro';
 import ContactCard from '../organisms/ContactCard.astro';
@@ -16,12 +18,15 @@ const t = useTranslations(lang);
 
 const intro = {
   it: {
-    text: 'Compila il seguente form per contattare la struttura e richiedere la disponibilità della camera. È possibile prenotare anche tramite',
+    text: 'Compila il seguente form per contattare la struttura e richiedere la disponibilità della camera.',
+    whatsapp: 'È possibile prenotare anche tramite WhatsApp.',
   },
   en: {
-    text: 'Fill out the following form to contact the property and request room availability. Bookings are also possible via',
+    text: 'Fill out the following form to contact the property and request room availability.',
+    whatsapp: 'Bookings are also possible via WhatsApp.',
   },
 }[lang];
+const whatsappHref = `${site.social.whatsapp}?text=${encodeURIComponent(t('whatsapp.prefill'))}`;
 ---
 
 <BaseLayout title={t('nav.book')} description={seo.booking.description[lang]}>
@@ -29,10 +34,14 @@ const intro = {
 
   <section class="container mx-auto grid max-w-6xl gap-10 px-4 py-14 lg:grid-cols-[3fr_2fr]">
     <div>
-      <p class="text-lg leading-relaxed">
-        {intro.text}{' '}
-        <a href={site.social.whatsapp} target="_blank" rel="noopener" class="link link-secondary">WhatsApp</a>.
-      </p>
+      <div class="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-box bg-base-200 p-5">
+        <p class="text-lg">{intro.whatsapp}</p>
+        <Button href={whatsappHref} variant="secondary" size="sm" target="_blank" rel="noopener">
+          <Icon name="fa6-brands:whatsapp" class="size-4" />
+          {t('whatsapp.cta')}
+        </Button>
+      </div>
+      <p class="mb-4 text-lg leading-relaxed">{intro.text}</p>
       <ContactForm lang={lang} type="prenotazione" />
     </div>
     <ContactCard />

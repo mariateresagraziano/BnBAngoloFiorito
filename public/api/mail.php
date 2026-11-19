@@ -89,12 +89,16 @@ $type = field('type', 20) === 'prenotazione' ? 'prenotazione' : 'contatti';
 $name = field('nome', 100);
 $email = field('email', 200);
 $message = field('messaggio', 5000);
+$phone = field('telefono', 30);
 
 $valid =
   // lettere (anche accentate), spazi, apostrofi, punti e trattini
   preg_match("/^[\p{L}\p{M}' .-]+$/u", $name) === 1 &&
   filter_var($email, FILTER_VALIDATE_EMAIL) !== false &&
-  $message !== '' &&
+  // messaggio obbligatorio solo nel form contatti (in prenotazione sono "richieste particolari" facoltative)
+  ($message !== '' || $type === 'prenotazione') &&
+  // telefono facoltativo, ma se presente deve essere plausibile
+  ($phone === '' || preg_match('/^[0-9 +().-]{6,30}$/', $phone) === 1) &&
   field('policy', 20) === 'accepted';
 
 $lines = [
@@ -103,6 +107,9 @@ $lines = [
   'Nome: ' . $name,
   'Email: ' . $email,
 ];
+if ($phone !== '') {
+  $lines[] = 'Telefono: ' . $phone;
+}
 
 if ($type === 'prenotazione') {
   // slug delle camere come in src/data/rooms.ts
@@ -135,8 +142,8 @@ if (!$valid) {
 }
 
 $lines[] = '';
-$lines[] = 'Messaggio:';
-$lines[] = $message;
+$lines[] = $type === 'prenotazione' ? 'Richieste particolari:' : 'Messaggio:';
+$lines[] = $message !== '' ? $message : '(nessuna)';
 
 // --- Invio ---
 $subject = ($type === 'prenotazione' ? 'Richiesta prenotazione' : 'Richiesta informazioni') . ' - ' . $name;

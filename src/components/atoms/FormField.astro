@@ -1,15 +1,20 @@
 ---
-// Etichetta + campo del form (slot). L'asterisco indica i campi obbligatori.
+// Etichetta + campo del form (slot). L'asterisco indica i campi obbligatori, `optional` aggiunge "(facoltativo)".
 interface Props {
   label: string;
   required?: boolean;
+  /** Testo "(facoltativo)" già tradotto */
+  optional?: string;
   class?: string;
 }
 
-const { label, required = false, class: className } = Astro.props;
+const { label, required = false, optional, class: className } = Astro.props;
 ---
 
 <label class:list={['fieldset', className]}>
-  <span class="fieldset-legend text-base">{label}{required && '*'}</span>
+  <span class="fieldset-legend text-base">
+    {label}{required && '*'}
+    {optional && <span class="font-normal text-base-content/70">({optional})</span>}
+  </span>
   <slot />
 </label>

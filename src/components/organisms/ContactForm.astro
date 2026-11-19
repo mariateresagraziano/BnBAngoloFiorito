@@ -23,7 +23,11 @@ const messages = {
   invalid: t('form.invalid'),
   captcha: t('form.captcha'),
   error: t('form.error'),
+  nightOne: t('form.nightOne'),
+  nightMany: t('form.nightMany'),
 };
+const booking = type === 'prenotazione';
+const legend = 'mb-1 font-bold tracking-wider text-secondary uppercase';
 const input = 'input w-full';
 ---
 
@@ -31,8 +35,9 @@ const input = 'input w-full';
   <input type="hidden" name="type" value={type} />
 
   {
-    type === 'prenotazione' && (
-      <>
+    booking && (
+      <fieldset class="mb-4">
+        <legend class={legend}>{t('form.stay')}</legend>
         <div class="grid gap-x-4 sm:grid-cols-2">
           <FormField label={t('form.room')} required>
             <select name="stanza" class="select w-full" required>
@@ -53,19 +58,38 @@ const input = 'input w-full';
             <input type="date" name="partenza" class={input} required disabled />
           </FormField>
         </div>
-      </>
+        <p class="booking-nights mt-1 hidden font-bold text-secondary" aria-live="polite"></p>
+      </fieldset>
     )
   }
 
-  <FormField label={t('form.name')} required>
-    <input type="text" name="nome" autocomplete="name" maxlength="100" class={input} required />
-  </FormField>
-  <FormField label={t('form.email')} required>
-    <input type="email" name="email" autocomplete="email" maxlength="200" class={input} required />
-  </FormField>
-  <FormField label={t('form.message')} required>
-    <textarea name="messaggio" rows="5" maxlength="5000" class="textarea w-full" required></textarea>
-  </FormField>
+  <fieldset>
+    {booking && <legend class={legend}>{t('form.details')}</legend>}
+    <FormField label={t('form.name')} required>
+      <input type="text" name="nome" autocomplete="name" maxlength="100" class={input} required />
+    </FormField>
+    <FormField label={t('form.email')} required>
+      <input type="email" name="email" autocomplete="email" maxlength="200" class={input} required />
+    </FormField>
+    {
+      booking && (
+        <FormField label={t('form.phone')} optional={t('form.optional')}>
+          <input type="tel" name="telefono" autocomplete="tel" maxlength="30" pattern="[0-9 +\(\)\.\-]{6,30}" class={input} />
+        </FormField>
+      )
+    }
+    {
+      booking ? (
+        <FormField label={t('form.requests')} optional={t('form.optional')}>
+          <textarea name="messaggio" rows="4" maxlength="5000" class="textarea w-full" />
+        </FormField>
+      ) : (
+        <FormField label={t('form.message')} required>
+          <textarea name="messaggio" rows="5" maxlength="5000" class="textarea w-full" required />
+        </FormField>
+      )
+    }
+  </fieldset>
 
   <!-- Honeypot: nascosto alle persone, i bot lo compilano -->
   <div class="hidden" aria-hidden="true">
@@ -112,13 +136,27 @@ const input = 'input w-full';
     const departure = form.querySelector<HTMLInputElement>('input[name="partenza"]');
     if (arrival && departure) {
       arrival.min = toISODate(new Date());
+      // Numero di notti sotto le date
+      const nights = form.querySelector<HTMLElement>('.booking-nights');
+      const updateNights = () => {
+        if (!nights) return;
+        const n = arrival.value && departure.value
+          ? Math.round((Date.parse(`${departure.value}T00:00Z`) - Date.parse(`${arrival.value}T00:00Z`)) / 86_400_000)
+          : 0;
+        nights.textContent = n === 1 ? messages.nightOne : messages.nightMany.replace('{n}', String(n));
+        nights.classList.toggle('hidden', n < 1);
+      };
+
       arrival.addEventListener('change', () => {
         const next = new Date(`${arrival.value}T00:00`);
         next.setDate(next.getDate() + 1);
         departure.min = toISODate(next);
         departure.disabled = !arrival.value;
         if (departure.value && departure.value < departure.min) departure.value = '';
+        updateNights();
       });
+      departure.addEventListener('change', updateNights);
+      form.addEventListener('reset', () => setTimeout(updateNights));
     }
 
     const show = (text: string, ok: boolean) => {
