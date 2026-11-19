@@ -22,7 +22,7 @@ const t = useTranslations(lang);
             name={room.name[lang]}
             image={room.image}
             features={room.features.map((f) => ({ icon: f.icon, text: f.text[lang] }))}
-            cta={{ label: t('cta.book'), href: localizePath('/prenota', lang) }}
+            cta={{ label: t('cta.book'), href: `${localizePath('/prenota', lang)}?stanza=${room.slug}` }}
             more={{ label: t('cta.discover'), href: `${localizePath('/camere', lang)}#${room.slug}` }}
           />
         ))

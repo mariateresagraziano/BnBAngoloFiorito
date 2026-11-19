@@ -15,6 +15,8 @@ export interface Room {
   image: ImageMetadata;
   gallery: ImageMetadata[];
   description: Localized;
+  /** Dati chiave mostrati come etichette sotto il nome (ospiti, letti) */
+  facts: IconItem[];
   /** Caratteristiche brevi mostrate nella card in home */
   features: IconItem[];
   schedule: IconItem[];
@@ -54,9 +56,13 @@ export const rooms: Room[] = [
     image: africa,
     gallery: gallery('africa'),
     description: {
-      it: "Una meravigliosa stanza in cui godersi l'atmosfera africana con mobili pregiati provenienti dal continente stesso. Questa camera contiene 2 letti: 1 letto matrimoniale e 1 letto ad una piazza e mezza. Può ospitare 3 adulti, oppure 2 adulti e 2 bambini.",
-      en: 'A wonderful room where you can experience the distinct atmosphere of East Africa, with fine furniture from the continent itself. It has 2 beds: 1 double bed and 1 three-quarter bed. It can accommodate 3 adults, or 2 adults and 2 children.',
+      it: "Una meravigliosa stanza in cui godersi l'atmosfera africana con mobili pregiati provenienti dal continente stesso.",
+      en: 'A wonderful room where you can experience the distinct atmosphere of East Africa, with fine furniture from the continent itself.',
     },
+    facts: [
+      { icon: 'fa6-solid:user-group', text: { it: '3 adulti o 2 adulti + 2 bambini', en: '3 adults or 2 adults + 2 children' } },
+      { icon: 'fa6-solid:bed', text: { it: '1 letto matrimoniale + 1 piazza e mezza', en: '1 double bed + 1 three-quarter bed' } },
+    ],
     features: [
       {
         icon: 'fa6-solid:user',
@@ -77,6 +83,10 @@ export const rooms: Room[] = [
       it: 'Camera doppia in stile inglese. Una stanza piena di luce naturale e fornita di ogni comfort.',
       en: 'Double room furnished in the typical English style, full of natural light and equipped with every comfort.',
     },
+    facts: [
+      { icon: 'fa6-solid:user-group', text: { it: '2 adulti', en: '2 adults' } },
+      { icon: 'fa6-solid:bed', text: { it: '1 letto matrimoniale', en: '1 double bed' } },
+    ],
     features: [{ icon: 'fa6-solid:user', text: { it: 'Capienza: 2 adulti', en: 'Capacity: 2 adults' } }, bathroom, checkIn],
     schedule,
     services,

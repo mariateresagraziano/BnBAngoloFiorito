@@ -101,6 +101,12 @@ const input = 'input w-full';
     const response = form.querySelector<HTMLElement>('.form-response')!;
     const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
 
+    // Camera preselezionata da ?stanza=<slug> (link "Prenota" delle camere); resta anche dopo il reset
+    const room = form.querySelector<HTMLSelectElement>('select[name="stanza"]');
+    const requested = new URLSearchParams(location.search).get('stanza');
+    const option = room && requested ? [...room.options].find((o) => o.value === requested) : undefined;
+    if (option) option.selected = option.defaultSelected = true;
+
     // Date: l'arrivo parte da oggi (calcolato nel browser, non in build); la partenza dal giorno dopo l'arrivo
     const arrival = form.querySelector<HTMLInputElement>('input[name="arrivo"]');
     const departure = form.querySelector<HTMLInputElement>('input[name="partenza"]');

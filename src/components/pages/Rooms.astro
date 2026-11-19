@@ -29,7 +29,7 @@ const intro = {
     rooms.map((room, i) => (
       <>
         {i > 0 && <TileDivider />}
-        <RoomDetail room={room} lang={lang} />
+        <RoomDetail room={room} lang={lang} reverse={i % 2 === 1} />
       </>
     ))
   }

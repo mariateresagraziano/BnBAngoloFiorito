@@ -1,0 +1,21 @@
+---
+// Etichetta a pillola con icona (dati chiave delle camere: ospiti, letti…).
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  icon: string;
+  class?: string;
+}
+
+const { icon, class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    'inline-flex items-center gap-2 rounded-full bg-primary/15 px-4 py-1.5 text-secondary',
+    className,
+  ]}
+>
+  <Icon name={icon} class="size-4 shrink-0" />
+  <slot />
+</span>
