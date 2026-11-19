@@ -1,6 +1,7 @@
 ---
 // Pagina di solo testo da Markdown (src/content/legal/<lang>/<slug>.md).
 // Se manca la traduzione mostra la versione italiana con un avviso.
+import { seo } from '../../data/seo';
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../templates/BaseLayout.astro';
 import PageTitle from '../organisms/PageTitle.astro';
@@ -24,7 +25,7 @@ const { Content } = await render(entry);
 const contentLang = translated ? lang : defaultLang;
 ---
 
-<BaseLayout title={entry.data.title}>
+<BaseLayout title={entry.data.title} description={seo[slug].description[lang]}>
   <PageTitle>{entry.data.title}</PageTitle>
   {
     !translated && (

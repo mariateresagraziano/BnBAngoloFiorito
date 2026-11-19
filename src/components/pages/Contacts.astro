@@ -1,4 +1,5 @@
 ---
+import { seo } from '../../data/seo';
 import BaseLayout from '../templates/BaseLayout.astro';
 import PageTitle from '../organisms/PageTitle.astro';
 import ContactForm from '../organisms/ContactForm.astro';
@@ -14,12 +15,12 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<BaseLayout title={t('nav.contact')}>
+<BaseLayout title={t('nav.contact')} description={seo.contacts.description[lang]}>
   <PageTitle>{t('nav.contact')}</PageTitle>
 
   <section class="container mx-auto grid max-w-6xl gap-10 px-4 py-14 lg:grid-cols-[3fr_2fr]">
     <div>
-      <h3 class="text-4xl">{t('contact.title')}</h3>
+      <h2 class="text-6xl md:text-7xl">{t('contact.title')}</h2>
       <ContactForm lang={lang} type="contatti" />
     </div>
     <ContactCard />

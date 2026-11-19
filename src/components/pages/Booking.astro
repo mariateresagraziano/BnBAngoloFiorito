@@ -1,4 +1,5 @@
 ---
+import { seo } from '../../data/seo';
 import BaseLayout from '../templates/BaseLayout.astro';
 import PageTitle from '../organisms/PageTitle.astro';
 import ContactForm from '../organisms/ContactForm.astro';
@@ -23,7 +24,7 @@ const intro = {
 }[lang];
 ---
 
-<BaseLayout title={t('nav.book')}>
+<BaseLayout title={t('nav.book')} description={seo.booking.description[lang]}>
   <PageTitle>{t('nav.book')}</PageTitle>
 
   <section class="container mx-auto grid max-w-6xl gap-10 px-4 py-14 lg:grid-cols-[3fr_2fr]">

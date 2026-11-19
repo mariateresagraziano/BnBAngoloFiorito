@@ -1,4 +1,5 @@
 ---
+import { seo } from '../../data/seo';
 import BaseLayout from '../templates/BaseLayout.astro';
 import PageTitle from '../organisms/PageTitle.astro';
 import PlacesSection from '../organisms/PlacesSection.astro';
@@ -17,7 +18,7 @@ const content = {
 }[lang];
 ---
 
-<BaseLayout title={content.title}>
+<BaseLayout title={content.title} description={seo.location.description[lang]}>
   <PageTitle>{content.title}</PageTitle>
   <PlacesSection lang={lang} />
   <CtaBand title={content.ctaTitle} cta={{ label: t('cta.book'), href: localizePath('/prenota', lang) }} />

@@ -1,5 +1,6 @@
 ---
 // Contenuti statici provvisori: verranno sostituiti dai dati di DatoCMS.
+import { seo } from '../../data/seo';
 import BaseLayout from '../templates/BaseLayout.astro';
 import PageTitle from '../organisms/PageTitle.astro';
 import Motto from '../organisms/Motto.astro';
@@ -42,7 +43,7 @@ const content = {
 }[lang];
 ---
 
-<BaseLayout title={t('nav.about')}>
+<BaseLayout title={t('nav.about')} description={seo.about.description[lang]}>
   <PageTitle>{t('nav.about')}</PageTitle>
   <Motto lang={lang} />
   <GallerySection lang={lang} intro={content.galleryIntro} />

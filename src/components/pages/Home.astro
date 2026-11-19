@@ -11,6 +11,9 @@ import introBnb from '../../assets/images/home/intro_bnb.jpg';
 import introCamere from '../../assets/images/home/intro_camere.jpg';
 import introLocation from '../../assets/images/home/intro_location.jpg';
 import { localizePath, type Lang } from '../../i18n/ui';
+import { seo, siteName } from '../../data/seo';
+import { site } from '../../data/site';
+import { roomRates } from '../../data/rates';
 
 interface Props {
   lang: Lang;
@@ -47,9 +50,28 @@ const slides = content.slides.map((s, i) => ({
   text: s.text,
   cta: { label: s.cta, href: localizePath(s.href, lang) },
 }));
+
+// Dati strutturati per Google (schema.org): struttura ricettiva con contatti e fascia di prezzo
+const prices = roomRates.flatMap((r) => r.rows.flatMap((row) => row.prices));
+const [street, city] = site.address.split(',').map((part) => part.trim());
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BedAndBreakfast',
+  name: siteName,
+  url: new URL(localizePath('/', lang), Astro.site).href,
+  description: seo.home.description[lang],
+  telephone: site.phone.replaceAll(' ', ''),
+  email: site.email,
+  address: { '@type': 'PostalAddress', streetAddress: street, addressLocality: city, addressCountry: 'IT' },
+  priceRange: `€${Math.min(...prices)}–€${Math.max(...prices)}`,
+  numberOfRooms: roomRates.length,
+  hasMap: site.mapsUrl,
+  sameAs: Object.values(site.social),
+};
 ---
 
-<BaseLayout title={content.title}>
+<BaseLayout title={seo.home.title[lang]} description={seo.home.description[lang]}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(structuredData)} />
   <!-- Hero + titolo occupano esattamente lo schermo sotto TopBar (2.5rem) e Header (4rem / 4.5rem su lg) -->
   <div class="flex h-[calc(100svh-6.5rem)] min-h-130 flex-col lg:h-[calc(100svh-7rem)]">
     <HeroCarousel slides={slides} class="flex-1" />

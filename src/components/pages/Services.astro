@@ -1,4 +1,5 @@
 ---
+import { seo } from '../../data/seo';
 import BaseLayout from '../templates/BaseLayout.astro';
 import PageTitle from '../organisms/PageTitle.astro';
 import MediaList from '../organisms/MediaList.astro';
@@ -20,7 +21,7 @@ const c = {
 const items = services.map((s) => ({ slug: s.slug, image: s.image, title: s.title[lang], text: s.text[lang] }));
 ---
 
-<BaseLayout title={t('nav.amenities')}>
+<BaseLayout title={t('nav.amenities')} description={seo.services.description[lang]}>
   <PageTitle>{t('nav.amenities')}</PageTitle>
   <AmenitiesSection lang={lang} title={c.overview} />
   <MediaList items={items} title={c.spaces} />

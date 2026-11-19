@@ -9,14 +9,14 @@ const it = useTranslations('it');
 const en = useTranslations('en');
 ---
 
-<BaseLayout title={`${it('notFound.title')} / ${en('notFound.title')}`}>
+<BaseLayout title={`${it('notFound.title')} / ${en('notFound.title')}`} noindex>
   <PageTitle>404</PageTitle>
   <section class="container mx-auto flex max-w-2xl flex-col items-center gap-6 px-4 py-16 text-center text-lg">
     <p><strong>{it('notFound.title')}.</strong> {it('notFound.text')}</p>
     <p lang="en"><strong>{en('notFound.title')}.</strong> {en('notFound.text')}</p>
     <div class="flex flex-wrap justify-center gap-4">
       <Button href="/">{it('notFound.cta')}</Button>
-      <Button href="/en/" variant="primary">{en('notFound.cta')}</Button>
+      <Button href="/en/" variant="secondary">{en('notFound.cta')}</Button>
     </div>
   </section>
 </BaseLayout>

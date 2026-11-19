@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.bnbangolofiorito.com/sitemap-index.xml
