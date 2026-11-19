@@ -12,8 +12,8 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 Components in `src/components/` follow atomic design. When markup repeats, extract it to the lowest fitting level and reuse it.
 
-- `atoms/` – smallest UI pieces, no dependencies on other components (Button, Logo, NavLink, SectionHeading, IconBadge, FormField, MapEmbed)
-- `molecules/` – small groups of atoms (ContactList, SocialLinks, LanguageSwitcher, IconList, MediaBlock, RoomCard, AmenityCard, PhotoGrid, DataTable, PolicyConsent)
+- `atoms/` – smallest UI pieces, no dependencies on other components (Button, Logo, NavLink, SectionHeading, IconBadge, IconTag, FormField, MapEmbed)
+- `molecules/` – small groups of atoms (ContactList, SocialLinks, LanguageSwitcher, IconList, MediaBlock, RoomCard, PriceCard, InfoCard, AmenityCard, PhotoGrid, DataTable, PolicyConsent)
 - `organisms/` – page sections (TopBar, Header, MobileNav, Footer, HeroCarousel, ImageSlider, PageTitle, Motto, TileDivider, RoomsSection, RoomDetail, AmenitiesSection, MediaList, GallerySection, MapSection, ProseSection, ContactForm, ContactCard)
 - `templates/` – page layouts (BaseLayout)
 - `pages/` – full page compositions taking `lang`; route files in `src/pages/` and `src/pages/en/` only render these

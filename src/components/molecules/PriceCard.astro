@@ -1,0 +1,32 @@
+---
+// Riepilogo prezzo di una camera: foto, nome, prezzo "da…" e bottone di prenotazione.
+import { Image } from 'astro:assets';
+import Button from '../atoms/Button.astro';
+
+interface Props {
+  name: string;
+  image: ImageMetadata;
+  /** Testo prima del prezzo, es. "da" */
+  fromLabel: string;
+  /** Prezzo già formattato, es. "60 €" */
+  price: string;
+  /** Unità, es. "/notte" */
+  unit: string;
+  cta: { label: string; href: string };
+}
+
+const { name, image, fromLabel, price, unit, cta } = Astro.props;
+---
+
+<article class="flex flex-col overflow-hidden rounded-box bg-base-100 shadow-sm">
+  <Image src={image} alt={name} widths={[480, 800]} sizes="(min-width: 768px) 480px, 100vw" class="aspect-video w-full object-cover" />
+  <div class="flex flex-1 flex-wrap items-end justify-between gap-4 p-6">
+    <div>
+      <h3 class="text-2xl font-bold">{name}</h3>
+      <p class="mt-1">
+        {fromLabel} <span class="text-3xl font-bold text-secondary">{price}</span>{unit}
+      </p>
+    </div>
+    <Button href={cta.href}>{cta.label}</Button>
+  </div>
+</article>

@@ -1,5 +1,6 @@
 ---
 // Tabella a righe alterne (ex u-table-color-row). Un'intestazione può mostrare N icone "persona".
+// `groups` aggiunge una riga di intestazione sopra le colonne (es. nome camera sopra "1 ospite | 2 ospiti").
 import { Icon } from 'astro-icon/components';
 
 interface Column {
@@ -9,19 +10,37 @@ interface Column {
   note?: string;
 }
 
+interface Group {
+  label: string;
+  /** Numero di colonne coperte */
+  span: number;
+}
+
 interface Props {
   columns: Column[];
+  groups?: Group[];
   rows: string[][];
   caption?: string;
 }
 
-const { columns, rows, caption } = Astro.props;
+const { columns, groups, rows, caption } = Astro.props;
 ---
 
 <div class="not-prose my-6 overflow-x-auto border border-base-300">
   <table class="table table-zebra text-base">
     {caption && <caption class="sr-only">{caption}</caption>}
-    <thead class="bg-primary text-primary-content">
+    <thead class="bg-base-200 text-secondary">
+      {
+        groups && (
+          <tr>
+            {groups.map((group, i) => (
+              <th colspan={group.span} class:list={['text-center text-base', { 'border-l border-base-300': i > 0 }]}>
+                {group.label}
+              </th>
+            ))}
+          </tr>
+        )
+      }
       <tr>
         {
           columns.map((col) => (
