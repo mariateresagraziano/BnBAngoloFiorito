@@ -12,10 +12,11 @@ const link = 'link link-secondary';
 
 <label class="flex cursor-pointer items-start gap-3">
   <input type="checkbox" name="policy" value="accepted" required class="checkbox checkbox-primary mt-0.5" />
+  <!-- Spazi espliciti: Astro elimina gli a capo tra testo ed espressioni -->
   <span>
-    *{t('form.consent')}
-    <a class={link} href={localizePath('/regolamento', lang)} target="_blank">{t('nav.rules')}</a>
-    {t('form.and')}
+    *{t('form.consent')}{' '}
+    <a class={link} href={localizePath('/regolamento', lang)} target="_blank">{t('nav.rules')}</a>{' '}
+    {t('form.and')}{' '}
     <a class={link} href={localizePath('/policy', lang)} target="_blank">{t('footer.privacy')}</a>
   </span>
 </label>
