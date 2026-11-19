@@ -1,20 +1,23 @@
 ---
 // Bottone del sito: <a> se riceve href, altrimenti <button>.
-// "accent" = giallo (ex m-btn-yellow), "primary" = verde acqua (ex m-btn-azul).
+// "primary" = CTA principale, giallo (ex m-btn-yellow). "secondary" = CTA secondaria, verde scuro.
+// Forma a pillola come i link (pill-link); l'hover scurisce lo stesso colore (default daisyUI) e solleva il bottone.
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = {
-  variant?: 'accent' | 'primary';
+  variant?: 'primary' | 'secondary';
   href?: string;
   type?: 'button' | 'submit' | 'reset';
   block?: boolean;
 } & Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'type'>;
 
-const { variant = 'accent', href, type = 'button', block = false, class: className, ...rest } = Astro.props;
+const { variant = 'primary', href, type = 'button', block = false, class: className, ...rest } = Astro.props;
 
 const classes = [
-  'btn border-0 px-8 font-bold uppercase',
-  variant === 'accent' ? 'btn-accent hover:bg-primary hover:text-primary-content' : 'btn-primary hover:bg-secondary',
+  'btn rounded-full border-0 px-8 font-bold tracking-wider uppercase',
+  'transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm',
+  'motion-reduce:transition-none motion-reduce:hover:translate-y-0',
+  variant === 'primary' ? 'btn-accent' : 'btn-secondary',
   { 'btn-block': block },
   className,
 ];

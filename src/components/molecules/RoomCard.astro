@@ -1,5 +1,7 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Button from '../atoms/Button.astro';
+import NavLink from '../atoms/NavLink.astro';
 import IconList from './IconList.astro';
 import MediaBlock from './MediaBlock.astro';
 
@@ -17,8 +19,15 @@ const { name, image, features, cta, more } = Astro.props;
 <MediaBlock image={image} alt={name}>
   <h3 class="text-3xl">{name}</h3>
   <IconList items={features} class="mt-4" />
-  <div class="mt-8 flex flex-wrap items-center gap-6">
-    <Button variant="primary" href={cta.href}>{cta.label}</Button>
-    {more && <a href={more.href} class="link link-primary font-bold uppercase">{more.label}</a>}
+  <div class="mt-8 flex flex-wrap items-center gap-4">
+    <Button href={cta.href}>{cta.label}</Button>
+    {
+      more && (
+        <NavLink href={more.href} class="font-bold tracking-wider text-secondary uppercase">
+          <span>{more.label}</span>
+          <Icon name="fa6-solid:arrow-right" class="size-3" />
+        </NavLink>
+      )
+    }
   </div>
 </MediaBlock>
