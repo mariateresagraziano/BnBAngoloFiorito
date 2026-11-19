@@ -70,7 +70,8 @@
   &:active {
     background-color: var(--pill-press-bg, color-mix(in oklab, var(--color-primary) 25%, transparent));
   }
-  &[aria-current="page"] {
+  &[aria-current="page"],
+  &[aria-selected="true"] {
     background-color: var(--pill-current-bg, color-mix(in oklab, var(--color-primary) 15%, transparent));
     color: var(--pill-current-fg, var(--color-secondary));
   }

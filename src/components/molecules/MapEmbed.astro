@@ -1,0 +1,51 @@
+---
+// Mappa Google a clic: finché il visitatore non la chiede non si carica nulla da Google (niente cookie di terze parti).
+// L'iframe sta in un <template> e viene inserito al clic su "Mostra la mappa".
+import { Icon } from 'astro-icon/components';
+import Button from '../atoms/Button.astro';
+import NavLink from '../atoms/NavLink.astro';
+import { site } from '../../data/site';
+import { getLangFromUrl, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const t = useTranslations(getLangFromUrl(Astro.url));
+---
+
+<div class:list={['map-embed relative w-full overflow-hidden bg-base-200', className]}>
+  <div class="map-placeholder flex size-full flex-col items-center justify-center gap-4 p-6 text-center">
+    <span class="flex size-14 items-center justify-center rounded-full bg-primary/15 text-secondary">
+      <Icon name="fa6-solid:location-dot" class="size-6" />
+    </span>
+    <p class="text-lg font-bold">{site.address}</p>
+    <div class="flex flex-wrap items-center justify-center gap-2">
+      <Button size="sm" class="map-load">{t('map.show')}</Button>
+      <NavLink href={site.mapsUrl} external class="text-sm font-bold tracking-wider text-secondary uppercase">
+        {t('map.open')}
+      </NavLink>
+    </div>
+    <p class="max-w-sm text-sm">{t('map.notice')}</p>
+  </div>
+  <template>
+    <iframe
+      src={site.mapsEmbedUrl}
+      title={`${site.name} – Google Maps`}
+      class="absolute inset-0 size-full border-0"
+      referrerpolicy="no-referrer-when-downgrade"
+      allowfullscreen></iframe>
+  </template>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.map-embed').forEach((el) => {
+    el.querySelector('.map-load')?.addEventListener('click', () => {
+      const template = el.querySelector('template');
+      if (!template) return;
+      el.querySelector('.map-placeholder')?.remove();
+      el.append(template.content.cloneNode(true));
+    });
+  });
+</script>

@@ -1,4 +1,6 @@
 ---
+// Galleria a schede: un pulsante per gruppo (giardino, B&B…), si vede una griglia alla volta.
+// Ogni griglia ha la sua galleria a schermo intero. Un'ancora #<slug> nell'URL apre quella scheda.
 import SectionHeading from '../atoms/SectionHeading.astro';
 import PhotoGrid from '../molecules/PhotoGrid.astro';
 import { galleries } from '../../data/gallery';
@@ -11,20 +13,74 @@ interface Props {
 
 const { lang, intro } = Astro.props;
 const t = useTranslations(lang);
+const label = (g: (typeof galleries)[number]) => g.title?.[lang] ?? t('section.gallery');
 ---
 
-<section class="bg-base-200 py-16">
+<section class="gallery-tabs bg-base-200 py-16">
   <div class="container mx-auto max-w-5xl px-4">
     <SectionHeading>{t('section.gallery')}</SectionHeading>
     {intro && <p class="mx-auto mt-4 max-w-2xl text-center text-lg">{intro}</p>}
 
+    <div role="tablist" aria-label={t('section.gallery')} class="mt-10 flex flex-wrap justify-center gap-2">
+      {
+        galleries.map((gallery, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`tab-${gallery.slug}`}
+            aria-controls={gallery.slug}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+            class="pill-link cursor-pointer font-bold tracking-wider uppercase"
+          >
+            {label(gallery)}
+          </button>
+        ))
+      }
+    </div>
+
     {
-      galleries.map((gallery) => (
-        <div id={gallery.slug} class="mt-10 scroll-mt-24">
-          {gallery.title && <h3 class="mb-4 text-center text-3xl">{gallery.title[lang]}</h3>}
-          <PhotoGrid images={gallery.images} alt={gallery.title?.[lang] ?? t('section.gallery')} />
+      galleries.map((gallery, i) => (
+        <div
+          id={gallery.slug}
+          role="tabpanel"
+          aria-labelledby={`tab-${gallery.slug}`}
+          hidden={i > 0}
+          class="mt-8 scroll-mt-24"
+        >
+          <PhotoGrid images={gallery.images} alt={label(gallery)} />
         </div>
       ))
     }
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.gallery-tabs').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+
+    const select = (tab: HTMLButtonElement, focus = false) => {
+      tabs.forEach((t) => {
+        const active = t === tab;
+        t.setAttribute('aria-selected', String(active));
+        t.tabIndex = active ? 0 : -1;
+        root.querySelector<HTMLElement>(`#${t.getAttribute('aria-controls')}`)!.hidden = !active;
+      });
+      if (focus) tab.focus();
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab));
+      // Frecce sinistra/destra, Home/Fine (pattern ARIA "tabs")
+      tab.addEventListener('keydown', (e) => {
+        const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+        if (next === undefined) return;
+        e.preventDefault();
+        select(tabs[(next + tabs.length) % tabs.length], true);
+      });
+    });
+
+    const fromHash = tabs.find((t) => `#${t.getAttribute('aria-controls')}` === location.hash);
+    if (fromHash) select(fromHash);
+  });
+</script>
