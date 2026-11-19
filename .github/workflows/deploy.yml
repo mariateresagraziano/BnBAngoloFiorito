@@ -1,0 +1,56 @@
+# Build del sito statico e upload via FTP su Aruba.
+# Configurazione su GitHub: Settings > Secrets and variables > Actions
+#   Secrets:   FTP_SERVER, FTP_USERNAME, FTP_PASSWORD
+#   Variables: PUBLIC_TURNSTILE_SITE_KEY, FTP_SERVER_DIR (es. "/"), FTP_PROTOCOL (opzionale, default "ftps")
+# config.php NON passa da qui: è git-ignored e va caricato a mano una volta sul server.
+name: Deploy su Aruba
+
+on:
+  push:
+    branches: [master]
+  # Avvio manuale dalla tab Actions
+  workflow_dispatch:
+  # Avvio da webhook esterno (es. DatoCMS alla pubblicazione dei contenuti)
+  repository_dispatch:
+    types: [deploy]
+
+# Un deploy alla volta; se ne arriva uno nuovo, quello in coda sostituisce il precedente
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Cache delle immagini ottimizzate da Astro: senza, ogni build le riconverte tutte
+      - uses: actions/cache@v4
+        with:
+          path: node_modules/.astro
+          key: astro-assets-${{ hashFiles('src/assets/**') }}
+          restore-keys: astro-assets-
+
+      - run: npm run build
+        env:
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+
+      # Carica solo i file cambiati. Lo stato è salvato sul server in .ftp-deploy-sync-state.json:
+      # vengono cancellati solo file caricati in precedenza da questa action, quindi config.php
+      # e gli altri file messi a mano restano intatti.
+      - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          local-dir: ./dist/
+          server-dir: ${{ vars.FTP_SERVER_DIR || '/' }}
