@@ -24,7 +24,7 @@ const isActive = (href: string) => (localizePath(href, lang).replace(/\/$/, '') 
           'children' in item ? (
             <li>
               <details class="nav-dropdown dropdown dropdown-end">
-                <summary class:list={['pill-link', { 'text-primary': item.children.some((c) => isActive(c.href)) }]}>
+                <summary class:list={['pill-link', { 'text-secondary': item.children.some((c) => isActive(c.href)) }]}>
                   {t(item.key)}
                 </summary>
                 <ul class="dropdown-content menu z-50 mt-2 w-56 rounded-box border-t-2 border-primary bg-base-100 p-2 shadow-lg">
