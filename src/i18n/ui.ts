@@ -15,7 +15,6 @@ export const ui = {
     'nav.home': 'Home',
     'nav.about': 'Chi siamo',
     'nav.rooms': 'Camere',
-    'nav.roomsOverview': 'Le camere',
     'nav.rules': 'Regolamento',
     'nav.rates': 'Tariffe',
     'nav.book': 'Prenota',
@@ -56,7 +55,6 @@ export const ui = {
     'nav.home': 'Home',
     'nav.about': 'About Us',
     'nav.rooms': 'Rooms',
-    'nav.roomsOverview': 'Our rooms',
     'nav.rules': 'Terms and Conditions',
     'nav.rates': 'Rates',
     'nav.book': 'Book',
@@ -119,23 +117,16 @@ export function switchLangPath(url: URL, target: Lang) {
   return localizePath(path, target);
 }
 
+// Menu principale. "Prenota" non è qui: è il bottone in evidenza nell'header.
+// Home solo nel menu mobile (su desktop si torna alla home dal logo).
 export const nav: NavItem[] = [
-  { key: 'nav.home', href: '/' },
+  { key: 'nav.home', href: '/', mobileOnly: true },
   { key: 'nav.about', href: '/chi-siamo' },
-  // Gruppo: la voce apre solo il sottomenu, la pagina /camere è la prima voce interna
-  {
-    key: 'nav.rooms',
-    children: [
-      { key: 'nav.roomsOverview', href: '/camere' },
-      { key: 'nav.rules', href: '/regolamento' },
-      { key: 'nav.rates', href: '/tariffe' },
-      { key: 'nav.book', href: '/prenota' },
-    ],
-  },
+  { key: 'nav.rooms', href: '/camere' },
+  { key: 'nav.rates', href: '/tariffe' },
   { key: 'nav.amenities', href: '/servizi' },
   { key: 'nav.location', href: '/location' },
   { key: 'nav.contact', href: '/contatti' },
 ];
 
-type NavLink = { key: UiKey; href: string };
-type NavItem = NavLink | { key: UiKey; children: NavLink[] };
+type NavItem = { key: UiKey; href: string; mobileOnly?: boolean };

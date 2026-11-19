@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
+import Button from '../atoms/Button.astro';
 import Logo from '../atoms/Logo.astro';
 import { getLangFromUrl, localizePath, nav, useTranslations } from '../../i18n/ui';
 
@@ -10,7 +11,7 @@ const isActive = (href: string) => (localizePath(href, lang).replace(/\/$/, '') 
 ---
 
 <header class="sticky top-0 z-40 bg-base-100 shadow-sm">
-  <div class="navbar container mx-auto px-4">
+  <div class="navbar container mx-auto gap-2 px-4">
     <div class="flex-1">
       <a href={localizePath('/', lang)} aria-label="Angolo Fiorito – Home">
         <Logo class="h-12 lg:h-14" loading="eager" />
@@ -20,34 +21,20 @@ const isActive = (href: string) => (localizePath(href, lang).replace(/\/$/, '') 
     <!-- Desktop -->
     <ul class="menu menu-horizontal hidden gap-1 text-sm tracking-wider uppercase lg:flex">
       {
-        nav.map((item) =>
-          'children' in item ? (
-            <li>
-              <details class="nav-dropdown dropdown dropdown-end">
-                <summary class:list={['pill-link', { 'text-secondary': item.children.some((c) => isActive(c.href)) }]}>
-                  {t(item.key)}
-                </summary>
-                <ul class="dropdown-content menu z-50 mt-2 w-56 rounded-box border-t-2 border-primary bg-base-100 p-2 shadow-lg">
-                {item.children.map((child) => (
-                  <li>
-                    <a href={localizePath(child.href, lang)} class="pill-link" aria-current={isActive(child.href) ? 'page' : undefined}>
-                      {t(child.key)}
-                    </a>
-                  </li>
-                ))}
-                </ul>
-              </details>
-            </li>
-          ) : (
+        nav
+          .filter((item) => !item.mobileOnly)
+          .map((item) => (
             <li>
               <a href={localizePath(item.href, lang)} class="pill-link" aria-current={isActive(item.href) ? 'page' : undefined}>
                 {t(item.key)}
               </a>
             </li>
-          ),
-        )
+          ))
       }
     </ul>
+
+    <!-- CTA principale, sempre visibile (anche su mobile, accanto al menu) -->
+    <Button href={localizePath('/prenota', lang)} size="sm" class="lg:ml-2">{t('nav.book')}</Button>
 
     <!-- Mobile: apre il drawer definito nel template BaseLayout -->
     <label for="nav-drawer" class="btn btn-ghost btn-square lg:hidden" aria-label={t('menu.open')}>
@@ -55,22 +42,3 @@ const isActive = (href: string) => (localizePath(href, lang).replace(/\/$/, '') 
     </label>
   </div>
 </header>
-
-<script>
-  // Sottomenu a clic (<details>): si chiude cliccando fuori, premendo Esc o aprendone un altro
-  const dropdowns = document.querySelectorAll<HTMLDetailsElement>('.nav-dropdown');
-  document.addEventListener('click', (e) => {
-    dropdowns.forEach((d) => {
-      if (!d.contains(e.target as Node)) d.open = false;
-    });
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return;
-    dropdowns.forEach((d) => {
-      if (d.open) {
-        d.open = false;
-        d.querySelector('summary')?.focus();
-      }
-    });
-  });
-</script>

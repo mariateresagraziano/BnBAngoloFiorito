@@ -9,12 +9,14 @@ type Props = {
   href?: string;
   type?: 'button' | 'submit' | 'reset';
   block?: boolean;
+  size?: 'sm' | 'md';
 } & Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'type'>;
 
-const { variant = 'primary', href, type = 'button', block = false, class: className, ...rest } = Astro.props;
+const { variant = 'primary', href, type = 'button', block = false, size = 'md', class: className, ...rest } = Astro.props;
 
 const classes = [
-  'btn rounded-full border-0 px-8 font-bold tracking-wider uppercase',
+  'btn rounded-full border-0 font-bold tracking-wider uppercase',
+  size === 'sm' ? 'btn-sm px-5' : 'px-8',
   'transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm',
   'motion-reduce:transition-none motion-reduce:hover:translate-y-0',
   variant === 'primary' ? 'btn-accent' : 'btn-secondary',

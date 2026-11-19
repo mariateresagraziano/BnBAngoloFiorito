@@ -63,8 +63,7 @@
     color 0.2s ease;
 
   &:hover,
-  &:focus-visible,
-  details[open] > & {
+  &:focus-visible {
     background-color: var(--pill-hover-bg, color-mix(in oklab, var(--color-primary) 15%, transparent));
     color: var(--pill-hover-fg, var(--color-secondary));
   }
@@ -84,9 +83,4 @@
   --pill-press-bg: color-mix(in oklab, white 30%, transparent);
   --pill-current-bg: var(--color-primary-content);
   --pill-current-fg: var(--color-secondary);
-}
-
-/* Nel sottomenu dell'header una pillola piena è troppo: angoli solo arrotondati */
-.dropdown-content .pill-link {
-  border-radius: 0.5rem;
 }
