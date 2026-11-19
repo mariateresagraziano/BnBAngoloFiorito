@@ -74,4 +74,4 @@ Staying at the B&B *Angolo Fiorito* implies acceptance of these rules and regula
 
 These regulations stem from our intent to offer a high-quality service in a comfortable and relaxing environment where each guest can enjoy their stay to the fullest and in complete tranquility.
 
-### Thank you for choosing B&B *Angolo Fiorito* and we wish you a happy stay!
+**Thank you for choosing B&B *Angolo Fiorito* and we wish you a happy stay!**

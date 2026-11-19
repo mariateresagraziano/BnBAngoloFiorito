@@ -74,4 +74,4 @@ Soggiornare presso il B&B *Angolo Fiorito* comporta l’accettazione di tale reg
 
 Il presente regolamento nasce dal nostro intento di offrire un servizio di alta qualità in un ambiente confortevole e rilassante dove ogni ospite possa godersi al massimo il proprio soggiorno nella più completa tranquillità.
 
-### Grazie per aver scelto la nostra struttura e felice soggiorno!
+**Grazie per aver scelto la nostra struttura e felice soggiorno!**

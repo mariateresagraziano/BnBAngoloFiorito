@@ -9,8 +9,9 @@ const { lang, class: className } = Astro.props;
 ---
 
 <section class:list={['container mx-auto max-w-4xl px-4 py-14', className]} lang={lang}>
+  <!-- Titoli verde scuro con più respiro, ancore sotto l'header sticky -->
   <div
-    class="prose prose-lg max-w-none prose-headings:font-sans prose-headings:font-bold prose-h3:text-primary prose-a:text-secondary"
+    class="prose prose-lg max-w-none prose-headings:scroll-mt-28 prose-headings:font-sans prose-headings:font-bold prose-h3:mt-14 prose-h3:mb-4 prose-h3:text-secondary prose-a:text-secondary prose-li:leading-relaxed"
   >
     <slot />
   </div>

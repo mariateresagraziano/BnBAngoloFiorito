@@ -40,8 +40,16 @@
   --noise: 0;
 }
 
+/* New Tegomin è un font giapponese: le virgolette tipografiche ‘ ’ “ ” hanno larghezza piena e
+   sembrano sparire. Solo per quei caratteri si usa un serif di sistema; se manca, vale New Tegomin. */
+@font-face {
+  font-family: "Tegomin Quotes";
+  src: local("Georgia"), local("Times New Roman"), local("Noto Serif"), local("DejaVu Serif"), local("Liberation Serif");
+  unicode-range: U+2018-201F;
+}
+
 @theme {
-  --font-sans: "New Tegomin", ui-serif, Georgia, serif;
+  --font-sans: "Tegomin Quotes", "New Tegomin", ui-serif, Georgia, serif;
   --font-script: "Allison", cursive;
   --color-primary-light: #80b6b5;
 }
