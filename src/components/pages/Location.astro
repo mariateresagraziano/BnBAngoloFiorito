@@ -1,20 +1,24 @@
 ---
 import BaseLayout from '../templates/BaseLayout.astro';
 import PageTitle from '../organisms/PageTitle.astro';
-import MediaList from '../organisms/MediaList.astro';
-import { places } from '../../data/places';
-import type { Lang } from '../../i18n/ui';
+import PlacesSection from '../organisms/PlacesSection.astro';
+import CtaBand from '../organisms/CtaBand.astro';
+import { localizePath, useTranslations, type Lang } from '../../i18n/ui';
 
 interface Props {
   lang: Lang;
 }
 
 const { lang } = Astro.props;
-const title = { it: 'Civitavecchia e Dintorni', en: 'Civitavecchia and surroundings' }[lang];
-const items = places.map((p) => ({ slug: p.slug, image: p.image, title: p.title[lang], text: p.text[lang] }));
+const t = useTranslations(lang);
+const content = {
+  it: { title: 'Civitavecchia e Dintorni', ctaTitle: 'Vieni a scoprire i dintorni' },
+  en: { title: 'Civitavecchia and surroundings', ctaTitle: 'Come and explore the area' },
+}[lang];
 ---
 
-<BaseLayout title={title}>
-  <PageTitle>{title}</PageTitle>
-  <MediaList items={items} />
+<BaseLayout title={content.title}>
+  <PageTitle>{content.title}</PageTitle>
+  <PlacesSection lang={lang} />
+  <CtaBand title={content.ctaTitle} cta={{ label: t('cta.book'), href: localizePath('/prenota', lang) }} />
 </BaseLayout>

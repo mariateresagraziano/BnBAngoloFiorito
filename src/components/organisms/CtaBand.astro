@@ -1,0 +1,20 @@
+---
+// Fascia finale con invito all'azione (titolo, testo facoltativo, bottone). Riutilizzabile in fondo alle pagine.
+import Button from '../atoms/Button.astro';
+
+interface Props {
+  title: string;
+  text?: string;
+  cta: { label: string; href: string };
+  /** Sfondo: "cream" (default) o "white" se la sezione precedente è già color crema */
+  background?: 'cream' | 'white';
+}
+
+const { title, text, cta, background = 'cream' } = Astro.props;
+---
+
+<section class:list={['px-4 py-16 text-center', background === 'cream' ? 'bg-base-200' : 'bg-base-100']}>
+  <h2 class="text-6xl md:text-7xl">{title}</h2>
+  {text && <p class="mx-auto mt-4 max-w-2xl text-lg">{text}</p>}
+  <Button href={cta.href} class="mt-8">{cta.label}</Button>
+</section>

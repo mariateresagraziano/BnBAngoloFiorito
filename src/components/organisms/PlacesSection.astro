@@ -1,0 +1,37 @@
+---
+// Griglia di schede dei luoghi nei dintorni (pagina "Nei dintorni").
+import PlaceCard from '../molecules/PlaceCard.astro';
+import { places } from '../../data/places';
+import { site } from '../../data/site';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Percorso dal B&B alla destinazione (Google Maps URLs, nessuna API key)
+const directionsUrl = (d: NonNullable<(typeof places)[number]['directions']>) => {
+  const params = new URLSearchParams({ api: '1', origin: site.address, destination: d.destination });
+  if (d.mode) params.set('travelmode', d.mode);
+  return `https://www.google.com/maps/dir/?${params}`;
+};
+---
+
+<section class="py-16">
+  <div class="container mx-auto grid max-w-6xl gap-6 px-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      places.map((place) => (
+        <PlaceCard
+          slug={place.slug}
+          image={place.image}
+          title={place.title[lang]}
+          text={place.text[lang]}
+          directions={place.directions && { label: t('map.directions'), href: directionsUrl(place.directions) }}
+        />
+      ))
+    }
+  </div>
+</section>

@@ -5,8 +5,9 @@ import PageTitle from '../organisms/PageTitle.astro';
 import Motto from '../organisms/Motto.astro';
 import GallerySection from '../organisms/GallerySection.astro';
 import MapSection from '../organisms/MapSection.astro';
+import CtaBand from '../organisms/CtaBand.astro';
 import { site } from '../../data/site';
-import { useTranslations, type Lang } from '../../i18n/ui';
+import { localizePath, useTranslations, type Lang } from '../../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -25,6 +26,7 @@ const content = {
       'Gli ospiti possono godere di spiagge vicine, visitare rinomati siti archeologici e storici, come le Terme di Traiano di Civitavecchia, Pyrgi di Santa Severa, Cerveteri e la famosa necropoli nella città etrusca di Tarquinia.',
     ],
     findUs: 'Ci trovi in:',
+    ctaTitle: 'Vieni a trovarci',
   },
   en: {
     galleryIntro:
@@ -35,6 +37,7 @@ const content = {
       'Rome is a mere 45 minute train ride, with trains leaving for St. Peter’s station every 30 minutes. The "Ficoncella" natural springs, noted for their therapeutic and healing qualities, are 4km away, while the "Madonna delle lacrime di Civitavecchia" religious sanctuary may be reached by car in 5 minutes. Family fun at the "Aquafelix" water park is also a short drive away in Civitavecchia.',
     ],
     findUs: 'Where we are:',
+    ctaTitle: 'Come and visit us',
   },
 }[lang];
 ---
@@ -50,4 +53,5 @@ const content = {
       <a href={site.mapsUrl} target="_blank" rel="noopener" class="link link-secondary">{site.address}, Italia</a>
     </p>
   </MapSection>
+  <CtaBand title={content.ctaTitle} cta={{ label: t('cta.book'), href: localizePath('/prenota', lang) }} />
 </BaseLayout>

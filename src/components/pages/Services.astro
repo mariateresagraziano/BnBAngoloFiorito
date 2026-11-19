@@ -3,8 +3,9 @@ import BaseLayout from '../templates/BaseLayout.astro';
 import PageTitle from '../organisms/PageTitle.astro';
 import MediaList from '../organisms/MediaList.astro';
 import AmenitiesSection from '../organisms/AmenitiesSection.astro';
+import CtaBand from '../organisms/CtaBand.astro';
 import { services } from '../../data/services';
-import { useTranslations, type Lang } from '../../i18n/ui';
+import { localizePath, useTranslations, type Lang } from '../../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -13,8 +14,8 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const c = {
-  it: { overview: 'In breve', spaces: 'Gli spazi della struttura' },
-  en: { overview: 'At a glance', spaces: 'Our spaces' },
+  it: { overview: 'In breve', spaces: 'Gli spazi della struttura', ctaTitle: "Ti aspettiamo all'Angolo Fiorito" },
+  en: { overview: 'At a glance', spaces: 'Our spaces', ctaTitle: 'We look forward to welcoming you' },
 }[lang];
 const items = services.map((s) => ({ slug: s.slug, image: s.image, title: s.title[lang], text: s.text[lang] }));
 ---
@@ -23,4 +24,5 @@ const items = services.map((s) => ({ slug: s.slug, image: s.image, title: s.titl
   <PageTitle>{t('nav.amenities')}</PageTitle>
   <AmenitiesSection lang={lang} title={c.overview} />
   <MediaList items={items} title={c.spaces} />
+  <CtaBand title={c.ctaTitle} cta={{ label: t('cta.book'), href: localizePath('/prenota', lang) }} background="white" />
 </BaseLayout>

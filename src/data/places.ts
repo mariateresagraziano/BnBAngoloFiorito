@@ -13,6 +13,8 @@ export interface Place {
   image: ImageMetadata;
   title: Record<Lang, string>;
   text: Record<Lang, string>;
+  /** Destinazione per il link "Come arrivare" (percorso dal B&B su Google Maps). Solo per luoghi specifici. */
+  directions?: { destination: string; mode?: 'driving' | 'transit' };
 }
 
 export const places: Place[] = [
@@ -38,6 +40,7 @@ export const places: Place[] = [
     slug: 'santa-severa',
     image: castello,
     title: { it: 'Il castello di Santa Severa', en: 'Castle of Santa Severa' },
+    directions: { destination: 'Castello di Santa Severa' },
     text: {
       it: 'A pochi chilometri da Civitavecchia, è uno dei luoghi più suggestivi del Lazio, un patrimonio di enorme valore storico e culturale.',
       en: 'It is one of the most evocative places in Lazio, a heritage of enormous historical and cultural value. It is a few kilometers from Civitavecchia.',
@@ -47,6 +50,7 @@ export const places: Place[] = [
     slug: 'roma',
     image: roma,
     title: { it: 'Roma', en: 'Rome' },
+    directions: { destination: 'Stazione Roma San Pietro', mode: 'transit' },
     text: {
       it: 'A soli 45 minuti di treno, con treni che partono per la stazione di San Pietro ogni 30 min.',
       en: "Rome is a mere 45 minutes train ride, with trains leaving for St. Peter's station every 30 minutes.",
@@ -56,6 +60,7 @@ export const places: Place[] = [
     slug: 'ficoncella',
     image: ficoncella,
     title: { it: 'Terme della Ficoncella', en: 'Ficoncella Thermal Baths' },
+    directions: { destination: 'Terme della Ficoncella, Civitavecchia' },
     text: {
       it: "Le Terme della Ficoncella sono un complesso di vasche naturali con acqua sulfurea, situato a pochi chilometri da Civitavecchia, noto per le proprietà terapeutiche e il panorama sul mare. L'acqua, calda e limpida, è indicata per problemi di pelle e articolari, e la struttura offre un'esperienza termale autentica a un prezzo modesto, con servizi essenziali e parcheggio gratuito.",
       en: "The Terme della Ficoncella are a complex of natural pools with sulfurous water, located a few kilometers from Civitavecchia. They are known for their therapeutic properties and the panoramic sea view. The water is warm and clear, and it's recommended for skin and joint problems. The facility offers an authentic thermal experience at a modest price, with essential services and free parking.",
