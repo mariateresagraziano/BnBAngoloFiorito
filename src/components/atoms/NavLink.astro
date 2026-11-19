@@ -1,0 +1,27 @@
+---
+// Link "a sé stante" (menu, top bar, footer, contatti, social) con hover a pillola (utility `pill-link`).
+// Su sfondo verde mettere `pill-light` su un contenitore. I link dentro il testo usano invece `link`.
+import type { HTMLAttributes } from 'astro/types';
+import { Icon } from 'astro-icon/components';
+
+interface Props extends HTMLAttributes<'a'> {
+  href: string;
+  icon?: string;
+  external?: boolean;
+  /** Pagina o voce corrente: imposta aria-current e lo stile "selezionato" */
+  current?: boolean;
+}
+
+const { href, icon, external = false, current = false, class: className, ...rest } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={['pill-link inline-flex items-center gap-2', className]}
+  aria-current={current ? 'page' : undefined}
+  {...external && { target: '_blank', rel: 'noopener' }}
+  {...rest}
+>
+  {icon && <Icon name={icon} />}
+  <slot />
+</a>

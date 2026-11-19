@@ -45,3 +45,41 @@
     @apply font-script font-normal leading-tight;
   }
 }
+
+/* Link a pillola (atomo NavLink, voci di menu, top bar, footer).
+   È una @utility: sta nel layer utilities e prevale sugli stili di daisyUI (sotto-layer). */
+@utility pill-link {
+  border-radius: 9999px;
+  padding: 0.375rem 0.75rem;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  &:hover,
+  &:focus-visible,
+  details[open] > & {
+    background-color: var(--pill-hover-bg, color-mix(in oklab, var(--color-primary) 15%, transparent));
+    color: var(--pill-hover-fg, var(--color-secondary));
+  }
+  &:active {
+    background-color: var(--pill-press-bg, color-mix(in oklab, var(--color-primary) 25%, transparent));
+  }
+  &[aria-current="page"] {
+    background-color: var(--pill-current-bg, color-mix(in oklab, var(--color-primary) 15%, transparent));
+    color: var(--pill-current-fg, var(--color-secondary));
+  }
+}
+
+/* Da mettere su un contenitore a sfondo verde: i pill-link al suo interno usano i colori chiari */
+@utility pill-light {
+  --pill-hover-bg: color-mix(in oklab, white 20%, transparent);
+  --pill-hover-fg: var(--color-primary-content);
+  --pill-press-bg: color-mix(in oklab, white 30%, transparent);
+  --pill-current-bg: var(--color-primary-content);
+  --pill-current-fg: var(--color-secondary);
+}
+
+/* Nel sottomenu dell'header una pillola piena è troppo: angoli solo arrotondati */
+.dropdown-content .pill-link {
+  border-radius: 0.5rem;
+}

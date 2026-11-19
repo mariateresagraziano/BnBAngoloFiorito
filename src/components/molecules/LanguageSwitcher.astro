@@ -1,20 +1,16 @@
 ---
+import NavLink from '../atoms/NavLink.astro';
 import { getLangFromUrl, languages, switchLangPath, type Lang } from '../../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 ---
 
-<nav class="flex gap-3 font-bold" aria-label="Lingua / Language">
+<nav class="flex gap-0.5 font-bold" aria-label="Lingua / Language">
   {
     (Object.keys(languages) as Lang[]).map((l) => (
-      <a
-        href={switchLangPath(Astro.url, l)}
-        hreflang={l}
-        aria-current={l === lang ? 'true' : undefined}
-        class:list={['uppercase hover:text-secondary', { 'text-secondary': l === lang }]}
-      >
+      <NavLink href={switchLangPath(Astro.url, l)} hreflang={l} current={l === lang} class="uppercase">
         {l}
-      </a>
+      </NavLink>
     ))
   }
 </nav>

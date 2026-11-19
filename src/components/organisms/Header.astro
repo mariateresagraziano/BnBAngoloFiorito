@@ -18,28 +18,29 @@ const isActive = (href: string) => (localizePath(href, lang).replace(/\/$/, '') 
     </div>
 
     <!-- Desktop -->
-    <ul class="menu menu-horizontal hidden gap-1 text-base lg:flex">
+    <ul class="menu menu-horizontal hidden gap-1 text-sm tracking-wider uppercase lg:flex">
       {
         nav.map((item) =>
-          item.children ? (
-            <li class="dropdown dropdown-hover dropdown-end">
-              <a href={localizePath(item.href, lang)} class:list={{ 'text-primary': isActive(item.href) }}>
-                {t(item.key)}
-                <Icon name="fa6-solid:chevron-down" class="size-3" />
-              </a>
-              <ul class="dropdown-content menu z-50 w-56 rounded-box bg-base-100 p-2 shadow">
+          'children' in item ? (
+            <li>
+              <details class="nav-dropdown dropdown dropdown-end">
+                <summary class:list={['pill-link', { 'text-primary': item.children.some((c) => isActive(c.href)) }]}>
+                  {t(item.key)}
+                </summary>
+                <ul class="dropdown-content menu z-50 mt-2 w-56 rounded-box border-t-2 border-primary bg-base-100 p-2 shadow-lg">
                 {item.children.map((child) => (
                   <li>
-                    <a href={localizePath(child.href, lang)} class:list={{ 'text-primary': isActive(child.href) }}>
+                    <a href={localizePath(child.href, lang)} class="pill-link" aria-current={isActive(child.href) ? 'page' : undefined}>
                       {t(child.key)}
                     </a>
                   </li>
                 ))}
-              </ul>
+                </ul>
+              </details>
             </li>
           ) : (
             <li>
-              <a href={localizePath(item.href, lang)} class:list={{ 'text-primary': isActive(item.href) }}>
+              <a href={localizePath(item.href, lang)} class="pill-link" aria-current={isActive(item.href) ? 'page' : undefined}>
                 {t(item.key)}
               </a>
             </li>
@@ -54,3 +55,22 @@ const isActive = (href: string) => (localizePath(href, lang).replace(/\/$/, '') 
     </label>
   </div>
 </header>
+
+<script>
+  // Sottomenu a clic (<details>): si chiude cliccando fuori, premendo Esc o aprendone un altro
+  const dropdowns = document.querySelectorAll<HTMLDetailsElement>('.nav-dropdown');
+  document.addEventListener('click', (e) => {
+    dropdowns.forEach((d) => {
+      if (!d.contains(e.target as Node)) d.open = false;
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    dropdowns.forEach((d) => {
+      if (d.open) {
+        d.open = false;
+        d.querySelector('summary')?.focus();
+      }
+    });
+  });
+</script>

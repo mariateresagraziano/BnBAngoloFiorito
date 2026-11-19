@@ -3,26 +3,38 @@ import { getLangFromUrl, localizePath, nav, useTranslations } from '../../i18n/u
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (localizePath(href, lang).replace(/\/$/, '') || '/') === current;
 ---
 
 <div class="drawer-side z-50">
   <label for="nav-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-  <ul class="menu min-h-full w-72 bg-base-100 p-4 text-lg">
+  <ul class="menu min-h-full w-72 bg-base-100 p-4 text-base tracking-wider uppercase">
     {
-      nav.map((item) => (
-        <li>
-          <a href={localizePath(item.href, lang)}>{t(item.key)}</a>
-          {item.children && (
-            <ul>
-              {item.children.map((child) => (
-                <li>
-                  <a href={localizePath(child.href, lang)}>{t(child.key)}</a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </li>
-      ))
+      nav.map((item) =>
+        'children' in item ? (
+          <li>
+            <details open={item.children.some((c) => isActive(c.href))}>
+              <summary class="pill-link">{t(item.key)}</summary>
+              <ul>
+                {item.children.map((child) => (
+                  <li>
+                    <a href={localizePath(child.href, lang)} class="pill-link" aria-current={isActive(child.href) ? 'page' : undefined}>
+                      {t(child.key)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          </li>
+        ) : (
+          <li>
+            <a href={localizePath(item.href, lang)} class="pill-link" aria-current={isActive(item.href) ? 'page' : undefined}>
+              {t(item.key)}
+            </a>
+          </li>
+        ),
+      )
     }
   </ul>
 </div>

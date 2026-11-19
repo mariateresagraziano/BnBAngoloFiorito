@@ -12,11 +12,13 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 Components in `src/components/` follow atomic design. When markup repeats, extract it to the lowest fitting level and reuse it.
 
-- `atoms/` – smallest UI pieces, no dependencies on other components (Button, Logo, IconLink, SectionHeading, IconBadge, FormField, MapEmbed)
+- `atoms/` – smallest UI pieces, no dependencies on other components (Button, Logo, NavLink, SectionHeading, IconBadge, FormField, MapEmbed)
 - `molecules/` – small groups of atoms (ContactList, SocialLinks, LanguageSwitcher, IconList, MediaBlock, RoomCard, AmenityCard, PhotoGrid, DataTable, PolicyConsent)
 - `organisms/` – page sections (TopBar, Header, MobileNav, Footer, HeroCarousel, ImageSlider, PageTitle, Motto, TileDivider, RoomsSection, RoomDetail, AmenitiesSection, MediaList, GallerySection, MapSection, ProseSection, ContactForm, ContactCard)
 - `templates/` – page layouts (BaseLayout)
 - `pages/` – full page compositions taking `lang`; route files in `src/pages/` and `src/pages/en/` only render these
+
+Standalone links (menus, top bar, footer, contacts) use `NavLink` / the `pill-link` utility (soft pill hover, `aria-current` = selected); on green surfaces add `pill-light` to a container. Links inside running text keep daisyUI `link`.
 
 Shared client scripts live in `src/scripts/` (e.g. `lightbox.ts`: PhotoSwipe for any `[data-lightbox]` container); build-time helpers in `src/lib/` (e.g. `toLightboxImages`). Galleries load images with `import.meta.glob` + `imagesByPrefix` (`src/data/images.ts`), so adding a file with the right prefix adds the photo.
 

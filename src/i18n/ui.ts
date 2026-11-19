@@ -15,6 +15,7 @@ export const ui = {
     'nav.home': 'Home',
     'nav.about': 'Chi siamo',
     'nav.rooms': 'Camere',
+    'nav.roomsOverview': 'Le camere',
     'nav.rules': 'Regolamento',
     'nav.rates': 'Tariffe',
     'nav.book': 'Prenota',
@@ -56,6 +57,7 @@ export const ui = {
     'nav.home': 'Home',
     'nav.about': 'About Us',
     'nav.rooms': 'Rooms',
+    'nav.roomsOverview': 'Our rooms',
     'nav.rules': 'Terms and Conditions',
     'nav.rates': 'Rates',
     'nav.book': 'Book',
@@ -119,13 +121,14 @@ export function switchLangPath(url: URL, target: Lang) {
   return localizePath(path, target);
 }
 
-export const nav = [
+export const nav: NavItem[] = [
   { key: 'nav.home', href: '/' },
   { key: 'nav.about', href: '/chi-siamo' },
+  // Gruppo: la voce apre solo il sottomenu, la pagina /camere è la prima voce interna
   {
     key: 'nav.rooms',
-    href: '/camere',
     children: [
+      { key: 'nav.roomsOverview', href: '/camere' },
       { key: 'nav.rules', href: '/regolamento' },
       { key: 'nav.rates', href: '/tariffe' },
       { key: 'nav.book', href: '/prenota' },
@@ -134,4 +137,7 @@ export const nav = [
   { key: 'nav.amenities', href: '/servizi' },
   { key: 'nav.location', href: '/location' },
   { key: 'nav.contact', href: '/contatti' },
-] satisfies { key: UiKey; href: string; children?: { key: UiKey; href: string }[] }[];
+];
+
+type NavLink = { key: UiKey; href: string };
+type NavItem = NavLink | { key: UiKey; children: NavLink[] };
